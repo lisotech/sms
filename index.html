@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZambiaBulkSMS - Reliable Bulk SMS Gateway for Airtel, MTN & Zamtel</title>
+    <title>ZambiaBulkSMS - Enterprise Bulk SMS Gateway for Airtel, MTN & Zamtel</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
@@ -60,8 +60,8 @@
                     <a href="#api" class="hover:text-emerald-600 transition-colors">API Docs</a>
                 </nav>
 
-                <!-- Auth / CTA Action Buttons -->
-                <div class="hidden md:flex items-center space-x-4">
+                <!-- Auth / User Session Display Action Buttons -->
+                <div class="hidden md:flex items-center space-x-4" id="navAuthContainer">
                     <button onclick="openModal('loginModal')" class="text-sm font-semibold text-slate-700 hover:text-emerald-600 px-4 py-2 transition-colors">
                         Sign In
                     </button>
@@ -86,7 +86,7 @@
             <a href="#coverage" class="block py-2 text-slate-600 font-medium">Networks</a>
             <a href="#pricing" class="block py-2 text-slate-600 font-medium">Pricing (ZMW)</a>
             <a href="#api" class="block py-2 text-slate-600 font-medium">API Docs</a>
-            <div class="pt-4 border-t border-slate-100 flex flex-col space-y-2">
+            <div id="mobileAuthContainer" class="pt-4 border-t border-slate-100 flex flex-col space-y-2">
                 <button onclick="openModal('loginModal')" class="w-full text-center py-2.5 text-sm font-semibold text-slate-700 border border-slate-200 rounded-xl">Sign In</button>
                 <button onclick="openModal('registerModal')" class="w-full text-center py-2.5 text-sm font-semibold text-white bg-emerald-600 rounded-xl shadow">Get Free Credits</button>
             </div>
@@ -127,19 +127,16 @@
                     <div class="pt-8 border-t border-slate-200/60">
                         <p class="text-xs uppercase tracking-wider text-slate-400 font-bold mb-3">Direct Gateway Connectivity For:</p>
                         <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4">
-                            <!-- Airtel Badge -->
                             <div class="flex items-center space-x-2 bg-white px-4 py-2 rounded-lg border border-slate-200 shadow-sm">
                                 <span class="w-3 h-3 rounded-full bg-red-600"></span>
                                 <span class="font-bold text-sm text-slate-800">Airtel Zambia</span>
                                 <span class="text-xs text-slate-400 font-mono">(097/07)</span>
                             </div>
-                            <!-- MTN Badge -->
                             <div class="flex items-center space-x-2 bg-white px-4 py-2 rounded-lg border border-slate-200 shadow-sm">
                                 <span class="w-3 h-3 rounded-full bg-amber-400"></span>
                                 <span class="font-bold text-sm text-slate-800">MTN Zambia</span>
                                 <span class="text-xs text-slate-400 font-mono">(096/06)</span>
                             </div>
-                            <!-- Zamtel Badge -->
                             <div class="flex items-center space-x-2 bg-white px-4 py-2 rounded-lg border border-slate-200 shadow-sm">
                                 <span class="w-3 h-3 rounded-full bg-blue-600"></span>
                                 <span class="font-bold text-sm text-slate-800">Zamtel</span>
@@ -147,20 +144,28 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
 
-                <!-- Right Quick Stats Card -->
+                <!-- Right Quick Stats Card & Wallet Overview -->
                 <div class="lg:col-span-5">
                     <div class="bg-white rounded-3xl p-8 border border-slate-200 shadow-xl shadow-slate-200/50 relative">
                         <div class="absolute -top-4 -right-4 bg-emerald-500 text-white font-bold text-xs px-3.5 py-1.5 rounded-full shadow-md uppercase tracking-wider">
                             99.9% Uptime
                         </div>
-                        <h3 class="text-lg font-bold text-slate-900 mb-6 flex items-center">
-                            <i class="fa-solid fa-chart-line text-emerald-600 mr-2.5"></i> Platform Performance
+                        <h3 class="text-lg font-bold text-slate-900 mb-6 flex items-center justify-between">
+                            <span class="flex items-center"><i class="fa-solid fa-wallet text-emerald-600 mr-2.5"></i> User Wallet & Stats</span>
+                            <span id="userWalletBadge" class="text-xs bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full font-mono">50 Credits</span>
                         </h3>
 
                         <div class="space-y-6">
+                            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 flex items-center justify-between">
+                                <div>
+                                    <p class="text-xs text-slate-500 uppercase font-semibold">Account Balance</p>
+                                    <p id="dashboardBalanceDisplay" class="text-2xl font-extrabold text-slate-900">K 17.50</p>
+                                </div>
+                                <button onclick="openModal('registerModal')" class="px-3 py-1.5 bg-emerald-600 text-white rounded-xl text-xs font-bold hover:bg-emerald-700 transition-colors">Top Up</button>
+                            </div>
+
                             <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 flex items-center justify-between">
                                 <div>
                                     <p class="text-xs text-slate-500 uppercase font-semibold">Average Delivery Speed</p>
@@ -173,20 +178,10 @@
 
                             <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 flex items-center justify-between">
                                 <div>
-                                    <p class="text-xs text-slate-500 uppercase font-semibold">SMS Handled Today</p>
-                                    <p class="text-2xl font-extrabold text-slate-900">482,900+</p>
-                                </div>
-                                <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-xl">
-                                    <i class="fa-solid fa-comments"></i>
-                                </div>
-                            </div>
-
-                            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 flex items-center justify-between">
-                                <div>
                                     <p class="text-xs text-slate-500 uppercase font-semibold">Active Zambian Clients</p>
                                     <p class="text-2xl font-extrabold text-slate-900">1,250+ Businesses</p>
                                 </div>
-                                <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center text-xl">
+                                <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-xl">
                                     <i class="fa-solid fa-building-columns"></i>
                                 </div>
                             </div>
@@ -221,14 +216,19 @@
 
                     <!-- Sender ID Selection -->
                     <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-2">Sender ID (Alpha Name)</label>
+                        <div class="flex items-center justify-between mb-2">
+                            <label class="block text-sm font-semibold text-slate-700">Sender ID (Alpha Name)</label>
+                            <button type="button" onclick="openSenderIdModal()" class="text-xs text-emerald-600 hover:text-emerald-700 font-semibold underline"><i class="fa-solid fa-plus mr-1"></i> Register New Sender ID</button>
+                        </div>
                         <div class="relative">
                             <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
                                 <i class="fa-solid fa-tag"></i>
                             </span>
-                            <input type="text" id="senderIdInput" value="ZambiaAlert" maxlength="11" class="w-full pl-11 pr-4 py-3 bg-white border border-slate-300 rounded-xl text-slate-800 font-semibold focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all">
+                            <select id="senderIdSelect" class="w-full pl-11 pr-4 py-3 bg-white border border-slate-300 rounded-xl text-slate-800 font-semibold focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all">
+                                <option value="ZambiaAlert">ZambiaAlert (Default)</option>
+                            </select>
                         </div>
-                        <p class="text-xs text-slate-500 mt-1">Maximum 11 characters alphanumeric (Approved ZICTA format).</p>
+                        <p class="text-xs text-slate-500 mt-1">Approved ZICTA sender ID format (max 11 chars).</p>
                     </div>
 
                     <!-- Recipient Numbers Input -->
@@ -278,7 +278,6 @@
 
                 <!-- Right Live Simulation Dashboard / Results Box -->
                 <div class="lg:col-span-5 bg-slate-900 text-white p-6 sm:p-8 rounded-3xl shadow-2xl relative overflow-hidden flex flex-col justify-between min-h-[500px]">
-                    <!-- Background decorative glow -->
                     <div class="absolute -right-12 -top-12 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
                     <div>
@@ -291,7 +290,6 @@
                             </span>
                         </div>
 
-                        <!-- Results Container / Default State -->
                         <div id="simulationOutput" class="py-8 space-y-6">
                             <div class="text-center py-12 text-slate-400">
                                 <div class="w-16 h-16 bg-slate-800 rounded-2xl flex items-center justify-center mx-auto mb-4 text-slate-500 text-2xl">
@@ -302,7 +300,6 @@
                         </div>
                     </div>
 
-                    <!-- Estimated Cost Footer -->
                     <div class="pt-6 border-t border-slate-800 bg-slate-900/80">
                         <div class="flex items-center justify-between text-sm">
                             <span class="text-slate-400">Estimated Total Cost:</span>
@@ -326,7 +323,6 @@
             </div>
 
             <div class="grid md:grid-cols-3 gap-8">
-                <!-- Feature 1 -->
                 <div class="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-md transition-shadow">
                     <div class="w-14 h-14 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-2xl mb-6">
                         <i class="fa-solid fa-tower-broadcast"></i>
@@ -337,7 +333,6 @@
                     </p>
                 </div>
 
-                <!-- Feature 2 -->
                 <div class="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-md transition-shadow">
                     <div class="w-14 h-14 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center text-2xl mb-6">
                         <i class="fa-solid fa-id-badge"></i>
@@ -348,7 +343,6 @@
                     </p>
                 </div>
 
-                <!-- Feature 3 -->
                 <div class="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-md transition-shadow">
                     <div class="w-14 h-14 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center text-2xl mb-6">
                         <i class="fa-solid fa-code"></i>
@@ -359,7 +353,6 @@
                     </p>
                 </div>
 
-                <!-- Feature 4 -->
                 <div class="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-md transition-shadow">
                     <div class="w-14 h-14 rounded-2xl bg-purple-100 text-purple-600 flex items-center justify-center text-2xl mb-6">
                         <i class="fa-solid fa-file-excel"></i>
@@ -370,7 +363,6 @@
                     </p>
                 </div>
 
-                <!-- Feature 5 -->
                 <div class="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-md transition-shadow">
                     <div class="w-14 h-14 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center text-2xl mb-6">
                         <i class="fa-solid fa-chart-pie"></i>
@@ -381,7 +373,6 @@
                     </p>
                 </div>
 
-                <!-- Feature 6 -->
                 <div class="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-md transition-shadow">
                     <div class="w-14 h-14 rounded-2xl bg-teal-100 text-teal-600 flex items-center justify-center text-2xl mb-6">
                         <i class="fa-solid fa-wallet"></i>
@@ -405,7 +396,6 @@
             </div>
 
             <div class="grid md:grid-cols-3 gap-8">
-                <!-- Airtel Network Card -->
                 <div class="bg-gradient-to-b from-red-50/50 to-white p-8 rounded-3xl border border-red-100 shadow-sm">
                     <div class="flex items-center justify-between mb-6">
                         <div class="w-12 h-12 rounded-2xl bg-red-600 text-white flex items-center justify-center font-bold text-xl shadow-md shadow-red-600/20">
@@ -420,7 +410,6 @@
                     </p>
                 </div>
 
-                <!-- MTN Network Card -->
                 <div class="bg-gradient-to-b from-amber-50/50 to-white p-8 rounded-3xl border border-amber-100 shadow-sm">
                     <div class="flex items-center justify-between mb-6">
                         <div class="w-12 h-12 rounded-2xl bg-amber-400 text-slate-900 flex items-center justify-center font-bold text-xl shadow-md shadow-amber-400/20">
@@ -435,7 +424,6 @@
                     </p>
                 </div>
 
-                <!-- Zamtel Network Card -->
                 <div class="bg-gradient-to-b from-blue-50/50 to-white p-8 rounded-3xl border border-blue-100 shadow-sm">
                     <div class="flex items-center justify-between mb-6">
                         <div class="w-12 h-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center font-bold text-xl shadow-md shadow-blue-600/20">
@@ -463,7 +451,6 @@
             </div>
 
             <div class="grid md:grid-cols-3 gap-8 items-stretch">
-                <!-- Tier 1 -->
                 <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between">
                     <div>
                         <div class="inline-block bg-slate-100 text-slate-800 font-bold text-xs px-3 py-1 rounded-full mb-4">Starter Pack</div>
@@ -485,7 +472,6 @@
                     </div>
                 </div>
 
-                <!-- Tier 2 (Featured) -->
                 <div class="bg-slate-900 text-white p-8 rounded-3xl border-2 border-emerald-500 shadow-xl relative flex flex-col justify-between">
                     <div class="absolute -top-3.5 left-1/2 transform -translate-x-1/2 bg-emerald-500 text-white font-bold text-xs px-4 py-1 rounded-full uppercase tracking-wider shadow">
                         Most Popular
@@ -510,7 +496,6 @@
                     </div>
                 </div>
 
-                <!-- Tier 3 -->
                 <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between">
                     <div>
                         <div class="inline-block bg-purple-50 text-purple-700 font-bold text-xs px-3 py-1 rounded-full mb-4">Enterprise High Volume</div>
@@ -540,7 +525,6 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid lg:grid-cols-12 gap-12 items-center">
                 
-                <!-- Left text -->
                 <div class="lg:col-span-6 space-y-6">
                     <span class="text-emerald-400 font-bold text-xs uppercase tracking-wider bg-emerald-500/20 px-3 py-1 rounded-full border border-emerald-500/30">Developer First</span>
                     <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight">Integrate in Minutes with our Simple REST API</h2>
@@ -569,10 +553,8 @@
                     </div>
                 </div>
 
-                <!-- Right Code Snippet Box -->
                 <div class="lg:col-span-6">
                     <div class="bg-slate-950 rounded-2xl border border-slate-800 shadow-2xl overflow-hidden">
-                        <!-- Code header tab -->
                         <div class="bg-slate-900 px-4 py-3 border-b border-slate-800 flex items-center justify-between">
                             <div class="flex items-center space-x-2">
                                 <span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span>
@@ -584,7 +566,6 @@
                                 <i class="fa-regular fa-copy mr-1"></i> Copy
                             </button>
                         </div>
-                        <!-- Code content -->
                         <div class="p-6 font-mono text-xs sm:text-sm text-emerald-300 overflow-x-auto leading-relaxed">
 <pre id="apiCodeBlock"><code>$curl = curl_init();
 
@@ -619,7 +600,6 @@ echo $response;</code></pre>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
                 
-                <!-- Col 1 -->
                 <div class="space-y-4 md:col-span-1">
                     <div class="flex items-center space-x-3">
                         <div class="w-9 h-9 rounded-xl bg-emerald-600 flex items-center justify-center text-white font-bold">
@@ -637,7 +617,6 @@ echo $response;</code></pre>
                     </div>
                 </div>
 
-                <!-- Col 2 -->
                 <div>
                     <h4 class="text-white text-sm font-bold uppercase tracking-wider mb-4">Quick Links</h4>
                     <ul class="space-y-2.5 text-xs">
@@ -649,7 +628,6 @@ echo $response;</code></pre>
                     </ul>
                 </div>
 
-                <!-- Col 3 -->
                 <div>
                     <h4 class="text-white text-sm font-bold uppercase tracking-wider mb-4">Zambian Networks</h4>
                     <ul class="space-y-2.5 text-xs">
@@ -660,7 +638,6 @@ echo $response;</code></pre>
                     </ul>
                 </div>
 
-                <!-- Col 4 -->
                 <div>
                     <h4 class="text-white text-sm font-bold uppercase tracking-wider mb-4">Support & Office</h4>
                     <ul class="space-y-2.5 text-xs">
@@ -684,14 +661,14 @@ echo $response;</code></pre>
         </div>
     </footer>
 
-    <!-- Simple Custom Modal Component for Login / Register -->
+    <!-- Universal Modal Component -->
     <div id="authModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
         <div class="bg-white rounded-3xl max-w-md w-full p-8 shadow-2xl relative animate-in fade-in zoom-in duration-200">
             <button onclick="closeModal()" class="absolute top-6 right-6 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center">
                 <i class="fa-solid fa-xmark text-sm"></i>
             </button>
             <div id="modalContentBody">
-                <!-- Injected via JS -->
+                <!-- Dynamically injected -->
             </div>
         </div>
     </div>
@@ -705,8 +682,53 @@ echo $response;</code></pre>
         </div>
     </div>
 
-    <!-- JavaScript Logic -->
+    <!-- JavaScript Logic with Authentication & Sender IDs Persistence -->
     <script>
+        // State Management
+        let appState = {
+            currentUser: null, // { email, company, phone, balance, senderIds }
+            senderIds: ["ZambiaAlert"]
+        };
+
+        // Initialize on DOM load
+        window.addEventListener('DOMContentLoaded', () => {
+            loadStateFromStorage();
+            analyzeRecipients();
+            updateCharCount();
+            updateNavUI();
+        });
+
+        // Local Storage Persistence Functions
+        function loadStateFromStorage() {
+            const savedUser = localStorage.getItem('zambia_sms_current_user');
+            const savedSenderIds = localStorage.getItem('zambia_sms_sender_ids');
+
+            if (savedUser) {
+                try {
+                    appState.currentUser = JSON.parse(savedUser);
+                } catch(e) { console.error(e); }
+            }
+
+            if (savedSenderIds) {
+                try {
+                    appState.senderIds = JSON.parse(savedSenderIds);
+                } catch(e) { console.error(e); }
+            } else {
+                appState.senderIds = ["ZambiaAlert", "LusakaTech"];
+            }
+
+            populateSenderIdDropdown();
+        }
+
+        function saveStateToStorage() {
+            if (appState.currentUser) {
+                localStorage.setItem('zambia_sms_current_user', JSON.stringify(appState.currentUser));
+            } else {
+                localStorage.removeItem('zambia_sms_current_user');
+            }
+            localStorage.setItem('zambia_sms_sender_ids', JSON.stringify(appState.senderIds));
+        }
+
         // Mobile Menu Toggle
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const mobileMenu = document.getElementById('mobileMenu');
@@ -714,11 +736,110 @@ echo $response;</code></pre>
             mobileMenu.classList.toggle('hidden');
         });
 
-        // Initialize simulator analysis on load
-        window.addEventListener('DOMContentLoaded', () => {
-            analyzeRecipients();
-            updateCharCount();
-        });
+        // Navigation UI Sync
+        function updateNavUI() {
+            const navAuthContainer = document.getElementById('navAuthContainer');
+            const mobileAuthContainer = document.getElementById('mobileAuthContainer');
+            const userWalletBadge = document.getElementById('userWalletBadge');
+            const dashboardBalanceDisplay = document.getElementById('dashboardBalanceDisplay');
+
+            if (appState.currentUser) {
+                userWalletBadge.innerText = `${appState.currentUser.balance} Credits`;
+                dashboardBalanceDisplay.innerText = `K ${(appState.currentUser.balance * 0.35).toFixed(2)}`;
+
+                navAuthContainer.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <div class="text-right hidden sm:block">
+                            <span class="block text-xs font-bold text-slate-900">${appState.currentUser.company}</span>
+                            <span class="block text-[10px] text-emerald-600 font-mono">${appState.currentUser.email}</span>
+                        </div>
+                        <button onclick="handleLogout()" class="bg-slate-100 hover:bg-red-50 text-slate-700 hover:text-red-600 text-xs font-semibold px-3.5 py-2 rounded-xl transition-all" title="Sign Out">
+                            <i class="fa-solid fa-right-from-bracket"></i> Logout
+                        </button>
+                    </div>
+                `;
+
+                mobileAuthContainer.innerHTML = `
+                    <div class="px-2 py-1 text-xs font-bold text-slate-800">${appState.currentUser.company}</div>
+                    <div class="px-2 pb-2 text-[11px] text-emerald-600">${appState.currentUser.email}</div>
+                    <button onclick="handleLogout()" class="w-full text-center py-2.5 text-sm font-semibold text-red-600 bg-red-50 rounded-xl">Sign Out</button>
+                `;
+            } else {
+                userWalletBadge.innerText = `50 Credits`;
+                dashboardBalanceDisplay.innerText = `K 17.50`;
+
+                navAuthContainer.innerHTML = `
+                    <button onclick="openModal('loginModal')" class="text-sm font-semibold text-slate-700 hover:text-emerald-600 px-4 py-2 transition-colors">
+                        Sign In
+                    </button>
+                    <button onclick="openModal('registerModal')" class="bg-slate-900 hover:bg-emerald-600 text-white text-sm font-semibold px-5 py-2.5 rounded-xl shadow-sm hover:shadow-md transition-all duration-200">
+                        Get Free Credits
+                    </button>
+                `;
+
+                mobileAuthContainer.innerHTML = `
+                    <button onclick="openModal('loginModal')" class="w-full text-center py-2.5 text-sm font-semibold text-slate-700 border border-slate-200 rounded-xl">Sign In</button>
+                    <button onclick="openModal('registerModal')" class="w-full text-center py-2.5 text-sm font-semibold text-white bg-emerald-600 rounded-xl shadow">Get Free Credits</button>
+                `;
+            }
+        }
+
+        // Sender ID Dropdown Population
+        function populateSenderIdDropdown() {
+            const select = document.getElementById('senderIdSelect');
+            if (!select) return;
+            const currentVal = select.value;
+            select.innerHTML = '';
+            appState.senderIds.forEach(id => {
+                const opt = document.createElement('option');
+                opt.value = id;
+                opt.innerText = id;
+                if (id === currentVal) opt.selected = true;
+                select.appendChild(opt);
+            });
+        }
+
+        // Open Sender ID registration modal
+        function openSenderIdModal() {
+            if (!appState.currentUser) {
+                showToast("Authentication Required", "Please sign in to register a custom Sender ID.", "error");
+                openModal('loginModal');
+                return;
+            }
+
+            const modal = document.getElementById('authModal');
+            const body = document.getElementById('modalContentBody');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+
+            body.innerHTML = `
+                <h3 class="text-2xl font-extrabold text-slate-900 mb-2">Register Sender ID</h3>
+                <p class="text-sm text-slate-500 mb-6">Add an approved alphanumeric brand name (max 11 chars).</p>
+                <form onsubmit="handleRegisterSenderId(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Sender ID Name</label>
+                        <input type="text" id="newSenderIdInput" required maxlength="11" placeholder="e.g. MYCOmpany" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm uppercase font-mono focus:ring-2 focus:ring-emerald-500 outline-none">
+                        <p class="text-[11px] text-slate-400 mt-1">Must be registered with ZICTA compliance guidelines.</p>
+                    </div>
+                    <button type="submit" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-md transition-all">Submit for Instant Activation</button>
+                </form>
+            `;
+        }
+
+        function handleRegisterSenderId(e) {
+            e.preventDefault();
+            const val = document.getElementById('newSenderIdInput').value.trim().toUpperCase();
+            if (val && !appState.senderIds.includes(val)) {
+                appState.senderIds.push(val);
+                saveStateToStorage();
+                populateSenderIdDropdown();
+                document.getElementById('senderIdSelect').value = val;
+                closeModal();
+                showToast("Sender ID Added", `Sender ID "${val}" successfully registered and selected.`, "success");
+            } else {
+                showToast("Error", "Sender ID already exists or is invalid.", "error");
+            }
+        }
 
         // Sample number lists loader
         function loadSampleNumbers(type) {
@@ -730,7 +851,6 @@ echo $response;</code></pre>
             showToast("Sample List Loaded", "Loaded 9 Zambian test numbers spanning Airtel, MTN, and Zamtel.", "success");
         }
 
-        // Clear recipients
         function clearNumbers() {
             document.getElementById('recipientsInput').value = "";
             analyzeRecipients();
@@ -739,7 +859,6 @@ echo $response;</code></pre>
         // Analyze and detect Zambian Networks
         function analyzeRecipients() {
             const rawText = document.getElementById('recipientsInput').value;
-            // Split by comma, newline or space
             const tokens = rawText.split(/[\s,\n]+/);
             
             let airtelCount = 0;
@@ -750,12 +869,11 @@ echo $response;</code></pre>
             tokens.forEach(token => {
                 let cleaned = token.trim().replace(/\D/g, '');
                 if (cleaned.length >= 9) {
-                    // Extract local prefix (e.g. 097, 096, 095, 26097 etc.)
                     let prefix = "";
                     if (cleaned.startsWith('260') && cleaned.length >= 12) {
-                        prefix = cleaned.substring(3, 5); // e.g. "97", "96", "95", "77", "76", "75"
+                        prefix = cleaned.substring(3, 5);
                     } else if (cleaned.startsWith('0') && cleaned.length >= 10) {
-                        prefix = cleaned.substring(1, 3); // e.g. "97", "96", "95", "77", "76", "75"
+                        prefix = cleaned.substring(1, 3);
                     }
 
                     if (prefix === '97' || prefix === '77') {
@@ -768,7 +886,6 @@ echo $response;</code></pre>
                         zamtelCount++;
                         totalValid++;
                     } else if (cleaned.length >= 9) {
-                        // Default fallback mapping if prefix is general
                         airtelCount++;
                         totalValid++;
                     }
@@ -783,25 +900,21 @@ echo $response;</code></pre>
             updateCostEstimation(totalValid);
         }
 
-        // Character Counter & SMS Part Calculator
         function updateCharCount() {
             const message = document.getElementById('messageInput').value;
             const length = message.length;
-            // Standard GSM 03.38 character limit is 160 per part, or 70 if unicode. We assume standard 160.
             const parts = length === 0 ? 0 : Math.ceil(length / 160);
             
             document.getElementById('charCounter').innerText = `${length} chars | ${parts} part${parts !== 1 ? 's' : ''}`;
             
-            // Re-calculate cost based on total numbers & parts
             const totalValid = parseInt(document.getElementById('countTotal').innerText) || 0;
             updateCostEstimation(totalValid, parts);
         }
 
-        // Update Estimated Cost in ZMW
         function updateCostEstimation(totalRecipients, partsOverride) {
             const message = document.getElementById('messageInput').value;
             const parts = partsOverride !== undefined ? partsOverride : (message.length === 0 ? 0 : Math.ceil(message.length / 160));
-            const ratePerPart = 0.35; // Standard ZMW rate
+            const ratePerPart = 0.35;
             const totalCost = totalRecipients * parts * ratePerPart;
 
             document.getElementById('estimatedCostDisplay').innerText = `K ${totalCost.toFixed(2)}`;
@@ -809,13 +922,13 @@ echo $response;</code></pre>
 
         // Simulate Sending Campaign
         function sendCampaign() {
-            const senderId = document.getElementById('senderIdInput').value.trim();
-            const recipientsText = document.getElementById('recipientsInput').value.trim();
-            const message = document.getElementById('messageInput').value.trim();
+            const senderId = document.getElementById('senderIdSelect').value;
             const totalValid = parseInt(document.getElementById('countTotal').innerText) || 0;
+            const message = document.getElementById('messageInput').value.trim();
 
-            if (!senderId) {
-                showToast("Error", "Please enter a valid Sender ID.", "error");
+            if (!appState.currentUser) {
+                showToast("Authentication Required", "Please sign in to dispatch bulk SMS campaigns.", "error");
+                openModal('loginModal');
                 return;
             }
             if (totalValid === 0) {
@@ -827,11 +940,18 @@ echo $response;</code></pre>
                 return;
             }
 
+            const parts = Math.ceil(message.length / 160);
+            const totalCreditsNeeded = totalValid * parts;
+
+            if (appState.currentUser.balance < totalCreditsNeeded) {
+                showToast("Insufficient Balance", `You need ${totalCreditsNeeded} credits, but have ${appState.currentUser.balance}. Please top up.`, "error");
+                return;
+            }
+
             const sendBtn = document.getElementById('sendBtn');
             const statusBadge = document.getElementById('gatewayStatusBadge');
             const outputBox = document.getElementById('simulationOutput');
 
-            // Set loading state
             sendBtn.disabled = true;
             sendBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Routing to Airtel, MTN & Zamtel...`;
             statusBadge.className = "inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-500/20 text-amber-400 border border-amber-500/30";
@@ -848,12 +968,13 @@ echo $response;</code></pre>
                 </div>
             `;
 
-            // Simulate network delay
             setTimeout(() => {
-                const parts = Math.ceil(message.length / 160);
-                const delivered = totalValid;
-                const failed = 0;
-                const cost = (totalValid * parts * 0.35).toFixed(2);
+                // Deduct balance
+                appState.currentUser.balance -= totalCreditsNeeded;
+                saveStateToStorage();
+                updateNavUI();
+
+                const cost = (totalCreditsNeeded * 0.35).toFixed(2);
 
                 sendBtn.disabled = false;
                 sendBtn.innerHTML = `<i class="fa-solid fa-paper-plane mr-2"></i> Send Bulk Campaign Now`;
@@ -877,16 +998,16 @@ echo $response;</code></pre>
                                 <span class="text-lg font-bold text-white">${totalValid} Numbers</span>
                             </div>
                             <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700">
-                                <span class="text-slate-400 block">Total Cost (ZMW)</span>
-                                <span class="text-lg font-bold text-emerald-400">K ${cost}</span>
+                                <span class="text-slate-400 block">Total Deducted</span>
+                                <span class="text-lg font-bold text-emerald-400">${totalCreditsNeeded} Credits (K ${cost})</span>
                             </div>
                             <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700">
                                 <span class="text-slate-400 block">Delivered (DLR)</span>
-                                <span class="text-lg font-bold text-emerald-400">${delivered} (100%)</span>
+                                <span class="text-lg font-bold text-emerald-400">${totalValid} (100%)</span>
                             </div>
                             <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700">
                                 <span class="text-slate-400 block">Failed / Rejected</span>
-                                <span class="text-lg font-bold text-red-400">${failed} (0%)</span>
+                                <span class="text-lg font-bold text-red-400">0 (0%)</span>
                             </div>
                         </div>
 
@@ -897,7 +1018,7 @@ echo $response;</code></pre>
                     </div>
                 `;
 
-                showToast("Campaign Sent", `Successfully routed ${totalValid} SMS messages across Zambian networks.`, "success");
+                showToast("Campaign Sent", `Successfully routed ${totalValid} messages across Zambian networks.`, "success");
             }, 1500);
         }
 
@@ -913,7 +1034,7 @@ echo $response;</code></pre>
             showToast("Copied to Clipboard", "PHP cURL snippet copied successfully.", "success");
         }
 
-        // Modal Handler
+        // Modal Handlers & Auth Forms
         function openModal(type) {
             const modal = document.getElementById('authModal');
             const body = document.getElementById('modalContentBody');
@@ -924,37 +1045,47 @@ echo $response;</code></pre>
                 body.innerHTML = `
                     <h3 class="text-2xl font-extrabold text-slate-900 mb-2">Welcome Back</h3>
                     <p class="text-sm text-slate-500 mb-6">Sign in to your ZambiaBulkSMS dashboard.</p>
-                    <form onsubmit="handleAuthSubmit(event, 'Login')" class="space-y-4">
+                    <form onsubmit="handleLoginSubmit(event)" class="space-y-4">
                         <div>
                             <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Email Address</label>
-                            <input type="email" required placeholder="admin@company.zm" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+                            <input type="email" id="loginEmail" required placeholder="admin@company.zm" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Password</label>
-                            <input type="password" required placeholder="••••••••" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+                            <input type="password" id="loginPassword" required placeholder="••••••••" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
                         </div>
                         <button type="submit" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-md transition-all">Sign In</button>
                     </form>
+                    <div class="mt-4 text-center text-xs text-slate-500">
+                        Don't have an account? <button onclick="openModal('registerModal')" class="text-emerald-600 font-bold underline">Create Account</button>
+                    </div>
                 `;
             } else {
                 body.innerHTML = `
                     <h3 class="text-2xl font-extrabold text-slate-900 mb-2">Create Free Account</h3>
                     <p class="text-sm text-slate-500 mb-6">Get 50 free trial SMS credits instantly.</p>
-                    <form onsubmit="handleAuthSubmit(event, 'Registration')" class="space-y-4">
+                    <form onsubmit="handleRegisterSubmit(event)" class="space-y-4">
                         <div>
                             <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Company / Organization Name</label>
-                            <input type="text" required placeholder="Lusaka Logistics Ltd" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+                            <input type="text" id="regCompany" required placeholder="Lusaka Logistics Ltd" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Zambian Mobile Number</label>
-                            <input type="tel" required placeholder="0977123456" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+                            <input type="tel" id="regPhone" required placeholder="0977123456" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Email Address</label>
-                            <input type="email" required placeholder="info@company.zm" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+                            <input type="email" id="regEmail" required placeholder="info@company.zm" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Password</label>
+                            <input type="password" id="regPassword" required placeholder="••••••••" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
                         </div>
                         <button type="submit" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-md transition-all">Create Account & Claim Credits</button>
                     </form>
+                    <div class="mt-4 text-center text-xs text-slate-500">
+                        Already have an account? <button onclick="openModal('loginModal')" class="text-emerald-600 font-bold underline">Sign In</button>
+                    </div>
                 `;
             }
         }
@@ -965,10 +1096,47 @@ echo $response;</code></pre>
             modal.classList.remove('flex');
         }
 
-        function handleAuthSubmit(e, actionType) {
+        function handleRegisterSubmit(e) {
             e.preventDefault();
+            const company = document.getElementById('regCompany').value.trim();
+            const phone = document.getElementById('regPhone').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+
+            appState.currentUser = {
+                company: company,
+                phone: phone,
+                email: email,
+                balance: 50 // 50 free credits
+            };
+
+            saveStateToStorage();
+            updateNavUI();
             closeModal();
-            showToast("Success", `${actionType} simulation successful! Welcome to ZambiaBulkSMS.`, "success");
+            showToast("Account Created", `Welcome ${company}! 50 free trial credits added to your wallet.`, "success");
+        }
+
+        function handleLoginSubmit(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value.trim();
+
+            appState.currentUser = {
+                company: email.split('@')[0].toUpperCase() + " CORP",
+                phone: "0977000000",
+                email: email,
+                balance: appState.currentUser ? appState.currentUser.balance : 120
+            };
+
+            saveStateToStorage();
+            updateNavUI();
+            closeModal();
+            showToast("Welcome Back", `Successfully signed in as ${email}.`, "success");
+        }
+
+        function handleLogout() {
+            appState.currentUser = null;
+            saveStateToStorage();
+            updateNavUI();
+            showToast("Signed Out", "You have successfully signed out of your account.", "success");
         }
 
         // Toast notification helper
