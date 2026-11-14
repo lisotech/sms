@@ -1,1167 +1,1058 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZambiaBulkSMS - Enterprise Bulk SMS Gateway for Airtel, MTN & Zamtel</title>
+    <title>AirSound Music - Buy & Sell Beats and Tracks Online</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts: Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
                     colors: {
                         brand: {
-                            50: '#f0fdf4',
-                            100: '#dcfce7',
-                            500: '#10b981',
-                            600: '#059669',
-                            700: '#047857',
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            900: '#312e81',
                         },
-                        airtel: '#ff0000',
-                        mtn: '#ffcc00',
-                        zamtel: '#00539f'
+                        emeraldAccent: '#10b981',
+                        violetAccent: '#8b5cf6',
                     }
                 }
             }
         }
     </script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.8; }
+        }
+        .animate-glow { animation: pulseGlow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+    </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-brand-500 selection:text-white">
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased pb-36">
 
-    <!-- Header & Navigation -->
-    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-100 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-20">
-                <!-- Logo -->
-                <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center text-white font-bold text-xl shadow-md shadow-emerald-500/20">
-                        <i class="fa-solid fa-paper-plane text-lg"></i>
-                    </div>
-                    <div>
-                        <span class="text-xl font-extrabold tracking-tight text-slate-900">Zambia<span class="text-emerald-600">BulkSMS</span></span>
-                        <span class="block text-[10px] uppercase tracking-wider text-slate-400 font-semibold">Enterprise Gateway</span>
-                    </div>
+    <!-- Toast Notification Banner -->
+    <div id="toast" class="fixed top-24 right-5 z-50 transform translate-x-full transition-transform duration-300 bg-slate-900 border border-slate-700 shadow-2xl rounded-2xl p-4 flex items-center space-x-3 max-w-sm">
+        <div id="toastIcon" class="w-10 h-10 rounded-full flex items-center justify-center bg-emerald-500/20 text-emerald-400">
+            <i class="fa-solid fa-check"></i>
+        </div>
+        <div>
+            <h4 id="toastTitle" class="text-sm font-bold text-white">Success</h4>
+            <p id="toastMessage" class="text-xs text-slate-400">Action completed successfully.</p>
+        </div>
+    </div>
+
+    <!-- Sticky Header Navigation -->
+    <header class="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+            
+            <!-- Brand Logo -->
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('explore')">
+                <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-brand-600 via-violetAccent to-emeraldAccent flex items-center justify-center shadow-lg shadow-indigo-500/20">
+                    <i class="fa-solid fa-waveform text-white text-xl"></i>
                 </div>
-
-                <!-- Desktop Navigation Links -->
-                <nav class="hidden md:flex items-center space-x-8 font-medium text-sm text-slate-600">
-                    <a href="#features" class="hover:text-emerald-600 transition-colors">Features</a>
-                    <a href="#simulator" class="hover:text-emerald-600 transition-colors font-semibold text-emerald-600">Interactive Demo</a>
-                    <a href="#coverage" class="hover:text-emerald-600 transition-colors">Networks</a>
-                    <a href="#pricing" class="hover:text-emerald-600 transition-colors">Pricing (ZMW)</a>
-                    <a href="#api" class="hover:text-emerald-600 transition-colors">API Docs</a>
-                </nav>
-
-                <!-- Auth / User Session Display Action Buttons -->
-                <div class="hidden md:flex items-center space-x-4" id="navAuthContainer">
-                    <button onclick="openModal('loginModal')" class="text-sm font-semibold text-slate-700 hover:text-emerald-600 px-4 py-2 transition-colors">
-                        Sign In
-                    </button>
-                    <button onclick="openModal('registerModal')" class="bg-slate-900 hover:bg-emerald-600 text-white text-sm font-semibold px-5 py-2.5 rounded-xl shadow-sm hover:shadow-md transition-all duration-200">
-                        Get Free Credits
-                    </button>
-                </div>
-
-                <!-- Mobile Menu Button -->
-                <div class="md:hidden flex items-center">
-                    <button id="mobileMenuBtn" class="text-slate-700 focus:outline-none p-2">
-                        <i class="fa-solid fa-bars text-xl"></i>
-                    </button>
+                <div>
+                    <span class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-white via-indigo-200 to-indigo-400 bg-clip-text text-transparent">AirSound</span>
+                    <span class="text-xs font-semibold px-1.5 py-0.5 rounded bg-brand-500/20 text-brand-400 ml-1">MUSIC</span>
                 </div>
             </div>
-        </div>
 
-        <!-- Mobile Menu -->
-        <div id="mobileMenu" class="hidden md:hidden bg-white border-b border-slate-100 px-4 pt-2 pb-6 space-y-3">
-            <a href="#features" class="block py-2 text-slate-600 font-medium">Features</a>
-            <a href="#simulator" class="block py-2 text-emerald-600 font-semibold">Interactive Demo</a>
-            <a href="#coverage" class="block py-2 text-slate-600 font-medium">Networks</a>
-            <a href="#pricing" class="block py-2 text-slate-600 font-medium">Pricing (ZMW)</a>
-            <a href="#api" class="block py-2 text-slate-600 font-medium">API Docs</a>
-            <div id="mobileAuthContainer" class="pt-4 border-t border-slate-100 flex flex-col space-y-2">
-                <button onclick="openModal('loginModal')" class="w-full text-center py-2.5 text-sm font-semibold text-slate-700 border border-slate-200 rounded-xl">Sign In</button>
-                <button onclick="openModal('registerModal')" class="w-full text-center py-2.5 text-sm font-semibold text-white bg-emerald-600 rounded-xl shadow">Get Free Credits</button>
+            <!-- Search Bar (Desktop) -->
+            <div class="hidden md:flex flex-1 max-w-md mx-4">
+                <div class="relative w-full">
+                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </span>
+                    <input type="text" id="searchInput" oninput="handleSearch(this.value)" placeholder="Search tracks, artists, genres (e.g. Afrobeat, Trap)..." class="w-full pl-10 pr-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-sm focus:outline-none focus:border-indigo-500 text-slate-200 transition">
+                </div>
+            </div>
+
+            <!-- Navigation Controls & Actions -->
+            <div class="flex items-center space-x-3 sm:space-x-4">
+                <div class="hidden sm:flex items-center bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs font-medium">
+                    <button id="buyerModeBtn" onclick="setRole('buyer')" class="px-3 py-1.5 rounded-lg transition text-white bg-indigo-600 shadow">Buyer</button>
+                    <button id="artistModeBtn" onclick="setRole('artist')" class="px-3 py-1.5 rounded-lg transition text-slate-400 hover:text-white">Artist</button>
+                </div>
+
+                <button onclick="openUploadModal()" class="hidden lg:flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-sm font-semibold rounded-xl shadow-lg shadow-emerald-600/20 transition transform active:scale-95">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                    <span>Sell Music</span>
+                </button>
+
+                <!-- Cart Button -->
+                <button onclick="toggleCartDrawer()" class="relative p-2.5 bg-slate-950 hover:bg-slate-800 border border-slate-800 rounded-xl text-slate-300 hover:text-white transition">
+                    <i class="fa-solid fa-cart-shopping text-lg"></i>
+                    <span id="cartBadge" class="absolute -top-1.5 -right-1.5 bg-indigo-600 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-slate-900 hidden">0</span>
+                </button>
+
+                <!-- Dashboard / Library Button -->
+                <button onclick="switchTab('dashboard')" class="flex items-center space-x-2 p-1.5 sm:px-3 sm:py-2 bg-slate-950 hover:bg-slate-800 border border-slate-800 rounded-xl text-slate-300 hover:text-white transition">
+                    <div class="w-7 h-7 rounded-lg bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold text-xs">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <span id="userRoleLabel" class="hidden sm:inline text-xs font-semibold">My Library</span>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Search Bar -->
+        <div class="md:hidden px-4 pb-3">
+            <div class="relative w-full">
+                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </span>
+                <input type="text" oninput="handleSearch(this.value)" placeholder="Search tracks, artists, genres..." class="w-full pl-10 pr-4 py-2 bg-slate-950 border border-slate-800 rounded-xl text-sm focus:outline-none focus:border-indigo-500 text-slate-200">
             </div>
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="relative overflow-hidden pt-12 pb-20 lg:pt-20 lg:pb-28 bg-gradient-to-b from-emerald-50/50 via-white to-slate-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="grid lg:grid-cols-12 gap-12 items-center">
+    <!-- Main Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- Navigation Tabs Bar -->
+        <div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-6">
+            <div class="flex space-x-2 sm:space-x-4 overflow-x-auto no-scrollbar">
+                <button onclick="switchTab('explore')" id="tabExploreBtn" class="px-4 py-2 rounded-xl text-sm font-semibold transition bg-indigo-600 text-white shadow-lg shadow-indigo-600/20 whitespace-nowrap">
+                    <i class="fa-solid fa-compass mr-2"></i>Explore Beats & Songs
+                </button>
+                <button onclick="switchTab('dashboard')" id="tabDashboardBtn" class="px-4 py-2 rounded-xl text-sm font-semibold transition text-slate-400 hover:text-white hover:bg-slate-900 whitespace-nowrap">
+                    <i class="fa-solid fa-compact-disc mr-2"></i>My Library & Dashboard
+                </button>
+                <button onclick="openUploadModal()" class="lg:hidden px-4 py-2 rounded-xl text-sm font-semibold transition bg-emerald-600/20 text-emerald-400 hover:bg-emerald-600/30 whitespace-nowrap">
+                    <i class="fa-solid fa-cloud-arrow-up mr-2"></i>Sell Track
+                </button>
+            </div>
+
+            <!-- Currency Toggle -->
+            <div class="flex items-center space-x-2 bg-slate-900 p-1 rounded-xl border border-slate-800 text-xs">
+                <button onclick="setCurrency('ZMW')" id="currZMW" class="px-2.5 py-1 rounded-lg font-bold bg-brand-600 text-white transition">ZMW (K)</button>
+                <button onclick="setCurrency('USD')" id="currUSD" class="px-2.5 py-1 rounded-lg font-medium text-slate-400 hover:text-white transition">USD ($)</button>
+            </div>
+        </div>
+
+        <!-- SECTION 1: EXPLORE MARKETPLACE -->
+        <div id="exploreTab" class="space-y-8">
+            <!-- Hero Banner -->
+            <div class="relative rounded-3xl overflow-hidden bg-gradient-to-r from-indigo-950 via-slate-900 to-purple-950 border border-slate-800 p-8 sm:p-12 shadow-2xl">
+                <div class="absolute -right-20 -top-20 w-80 h-80 bg-indigo-500/15 rounded-full blur-3xl pointer-events-none animate-glow"></div>
+                <div class="absolute -left-20 -bottom-20 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
                 
-                <!-- Left text content -->
-                <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
-                    <div class="inline-flex items-center space-x-2 bg-emerald-100/80 text-emerald-800 px-3.5 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider">
-                        <span class="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
-                        <span>Direct Carrier Aggregator in Zambia</span>
+                <div class="relative z-10 max-w-2xl space-y-4">
+                    <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 text-xs font-semibold">
+                        <i class="fa-solid fa-bolt text-amber-400"></i>
+                        <span>The Ultimate Global & African Music Marketplace</span>
                     </div>
-                    
-                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-none">
-                        Instant, Reliable <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500">Bulk SMS Delivery</span> Across Zambia
+                    <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
+                        Buy & Sell Professional Beats & Songs.
                     </h1>
-                    
-                    <p class="text-lg text-slate-600 max-w-2xl mx-auto lg:mx-0 font-normal">
-                        Empower your business communications with enterprise-grade SMS broadcasting. Guaranteed direct routes to <strong class="text-slate-900 font-semibold">Airtel (+260 97/07)</strong>, <strong class="text-slate-900 font-semibold">MTN (+260 96/06)</strong>, and <strong class="text-slate-900 font-semibold">Zamtel (+260 95/05)</strong> networks.
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+                        Connect with independent artists and top producers. Secure instant WAV delivery, royalty-free licensing, and safe payouts.
                     </p>
-
-                    <!-- CTA Buttons -->
-                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start space-y-3 sm:space-y-0 sm:space-x-4 pt-2">
-                        <a href="#simulator" class="w-full sm:w-auto inline-flex items-center justify-center bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-8 py-4 rounded-xl shadow-lg shadow-emerald-600/30 transition-all transform hover:-translate-y-0.5">
-                            <i class="fa-solid fa-bolt mr-2.5"></i> Test SMS Simulator
-                        </a>
-                        <a href="#pricing" class="w-full sm:w-auto inline-flex items-center justify-center bg-white hover:bg-slate-50 text-slate-700 font-semibold px-8 py-4 rounded-xl border border-slate-200 shadow-sm transition-all">
-                            View ZMW Pricing
-                        </a>
-                    </div>
-
-                    <!-- Network Partner Badges -->
-                    <div class="pt-8 border-t border-slate-200/60">
-                        <p class="text-xs uppercase tracking-wider text-slate-400 font-bold mb-3">Direct Gateway Connectivity For:</p>
-                        <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4">
-                            <div class="flex items-center space-x-2 bg-white px-4 py-2 rounded-lg border border-slate-200 shadow-sm">
-                                <span class="w-3 h-3 rounded-full bg-red-600"></span>
-                                <span class="font-bold text-sm text-slate-800">Airtel Zambia</span>
-                                <span class="text-xs text-slate-400 font-mono">(097/07)</span>
-                            </div>
-                            <div class="flex items-center space-x-2 bg-white px-4 py-2 rounded-lg border border-slate-200 shadow-sm">
-                                <span class="w-3 h-3 rounded-full bg-amber-400"></span>
-                                <span class="font-bold text-sm text-slate-800">MTN Zambia</span>
-                                <span class="text-xs text-slate-400 font-mono">(096/06)</span>
-                            </div>
-                            <div class="flex items-center space-x-2 bg-white px-4 py-2 rounded-lg border border-slate-200 shadow-sm">
-                                <span class="w-3 h-3 rounded-full bg-blue-600"></span>
-                                <span class="font-bold text-sm text-slate-800">Zamtel</span>
-                                <span class="text-xs text-slate-400 font-mono">(095/05)</span>
-                            </div>
-                        </div>
+                    <div class="flex flex-wrap gap-3 pt-2">
+                        <button onclick="filterGenre('All')" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl shadow transition">All Genres</button>
+                        <button onclick="filterGenre('Afrobeat')" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 text-xs font-medium rounded-xl transition">Afrobeat</button>
+                        <button onclick="filterGenre('Amapiano')" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 text-xs font-medium rounded-xl transition">Amapiano</button>
+                        <button onclick="filterGenre('Trap')" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 text-xs font-medium rounded-xl transition">Trap / HipHop</button>
+                        <button onclick="filterGenre('Dancehall')" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 text-xs font-medium rounded-xl transition">Dancehall</button>
                     </div>
                 </div>
+            </div>
 
-                <!-- Right Quick Stats Card & Wallet Overview -->
-                <div class="lg:col-span-5">
-                    <div class="bg-white rounded-3xl p-8 border border-slate-200 shadow-xl shadow-slate-200/50 relative">
-                        <div class="absolute -top-4 -right-4 bg-emerald-500 text-white font-bold text-xs px-3.5 py-1.5 rounded-full shadow-md uppercase tracking-wider">
-                            99.9% Uptime
-                        </div>
-                        <h3 class="text-lg font-bold text-slate-900 mb-6 flex items-center justify-between">
-                            <span class="flex items-center"><i class="fa-solid fa-wallet text-emerald-600 mr-2.5"></i> User Wallet & Stats</span>
-                            <span id="userWalletBadge" class="text-xs bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full font-mono">50 Credits</span>
+            <!-- Filters & Sorting Header -->
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 id="sectionTitle" class="text-xl font-bold text-white">Trending Beats & Tracks</h2>
+                    <p class="text-xs text-slate-400">Preview and license high-quality audio instantly.</p>
+                </div>
+                <div class="flex items-center space-x-2 text-xs text-slate-400">
+                    <span>Sort by:</span>
+                    <select id="sortSelect" onchange="sortTracks(this.value)" class="bg-slate-900 border border-slate-800 rounded-lg px-3 py-1.5 text-slate-200 focus:outline-none">
+                        <option value="popular">Most Popular</option>
+                        <option value="newest">Newest Uploads</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Tracks Grid -->
+            <div id="tracksGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Populated dynamically -->
+            </div>
+        </div>
+
+        <!-- SECTION 2: USER DASHBOARD & LIBRARY -->
+        <div id="dashboardTab" class="space-y-8 hidden">
+            <!-- Stats Row -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 relative overflow-hidden">
+                    <div class="absolute right-4 top-4 text-emerald-500/20 text-4xl"><i class="fa-solid fa-wallet"></i></div>
+                    <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Sales Earnings</span>
+                    <h3 id="statEarnings" class="text-3xl font-extrabold text-white mt-2">K0.00</h3>
+                    <p class="text-xs text-emerald-400 mt-1"><i class="fa-solid fa-arrow-up mr-1"></i>+15.2% this month</p>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 relative overflow-hidden">
+                    <div class="absolute right-4 top-4 text-indigo-500/20 text-4xl"><i class="fa-solid fa-compact-disc"></i></div>
+                    <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Uploaded Tracks</span>
+                    <h3 id="statUploads" class="text-3xl font-extrabold text-white mt-2">0</h3>
+                    <p class="text-xs text-indigo-400 mt-1">Listed in marketplace</p>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 relative overflow-hidden">
+                    <div class="absolute right-4 top-4 text-purple-500/20 text-4xl"><i class="fa-solid fa-bag-shopping"></i></div>
+                    <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Purchased Library</span>
+                    <h3 id="statPurchases" class="text-3xl font-extrabold text-white mt-2">0</h3>
+                    <p class="text-xs text-purple-400 mt-1">Ready for unlimited WAV download</p>
+                </div>
+            </div>
+
+            <!-- Two Column Management -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Artist Uploads Studio -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-bold text-white flex items-center space-x-2">
+                            <i class="fa-solid fa-microphone-lines text-indigo-400"></i>
+                            <span>My Artist Uploads</span>
                         </h3>
-
-                        <div class="space-y-6">
-                            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 flex items-center justify-between">
-                                <div>
-                                    <p class="text-xs text-slate-500 uppercase font-semibold">Account Balance</p>
-                                    <p id="dashboardBalanceDisplay" class="text-2xl font-extrabold text-slate-900">K 17.50</p>
-                                </div>
-                                <button onclick="openModal('registerModal')" class="px-3 py-1.5 bg-emerald-600 text-white rounded-xl text-xs font-bold hover:bg-emerald-700 transition-colors">Top Up</button>
-                            </div>
-
-                            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 flex items-center justify-between">
-                                <div>
-                                    <p class="text-xs text-slate-500 uppercase font-semibold">Average Delivery Speed</p>
-                                    <p class="text-2xl font-extrabold text-slate-900">1.8 seconds</p>
-                                </div>
-                                <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl">
-                                    <i class="fa-solid fa-gauge-high"></i>
-                                </div>
-                            </div>
-
-                            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 flex items-center justify-between">
-                                <div>
-                                    <p class="text-xs text-slate-500 uppercase font-semibold">Active Zambian Clients</p>
-                                    <p class="text-2xl font-extrabold text-slate-900">1,250+ Businesses</p>
-                                </div>
-                                <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-xl">
-                                    <i class="fa-solid fa-building-columns"></i>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mt-6 pt-6 border-t border-slate-100 text-center">
-                            <p class="text-xs text-slate-500">Fully compliant with ZICTA regulations & data protection acts.</p>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- Interactive Bulk SMS Sender Simulation Section -->
-    <section id="simulator" class="py-20 bg-white border-t border-b border-slate-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto mb-16">
-                <span class="text-emerald-600 font-bold text-xs uppercase tracking-wider bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100">Live Web Simulator</span>
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-3">Test Drive Our Bulk SMS Engine</h2>
-                <p class="text-slate-600 mt-3">Experience our instant carrier lookup, automated segmentation, and live delivery stats simulation tailored for Zambian numbers.</p>
-            </div>
-
-            <div class="grid lg:grid-cols-12 gap-8 items-start">
-                
-                <!-- Left Simulation Form Controls -->
-                <div class="lg:col-span-7 bg-slate-50 p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
-                    <h3 class="text-lg font-bold text-slate-900 flex items-center">
-                        <i class="fa-solid fa-sliders text-emerald-600 mr-2"></i> Campaign Configuration
-                    </h3>
-
-                    <!-- Sender ID Selection -->
-                    <div>
-                        <div class="flex items-center justify-between mb-2">
-                            <label class="block text-sm font-semibold text-slate-700">Sender ID (Alpha Name)</label>
-                            <button type="button" onclick="openSenderIdModal()" class="text-xs text-emerald-600 hover:text-emerald-700 font-semibold underline"><i class="fa-solid fa-plus mr-1"></i> Register New Sender ID</button>
-                        </div>
-                        <div class="relative">
-                            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                                <i class="fa-solid fa-tag"></i>
-                            </span>
-                            <select id="senderIdSelect" class="w-full pl-11 pr-4 py-3 bg-white border border-slate-300 rounded-xl text-slate-800 font-semibold focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all">
-                                <option value="ZambiaAlert">ZambiaAlert (Default)</option>
-                            </select>
-                        </div>
-                        <p class="text-xs text-slate-500 mt-1">Approved ZICTA sender ID format (max 11 chars).</p>
-                    </div>
-
-                    <!-- Recipient Numbers Input -->
-                    <div>
-                        <div class="flex items-center justify-between mb-2">
-                            <label class="block text-sm font-semibold text-slate-700">Recipient Phone Numbers</label>
-                            <div class="space-x-2">
-                                <button type="button" onclick="loadSampleNumbers('mixed')" class="text-xs text-emerald-600 hover:text-emerald-700 font-semibold underline">Load Sample List</button>
-                                <span class="text-slate-300">|</span>
-                                <button type="button" onclick="clearNumbers()" class="text-xs text-red-500 hover:text-red-600 font-semibold">Clear</button>
-                            </div>
-                        </div>
-                        <textarea id="recipientsInput" rows="4" placeholder="Enter mobile numbers separated by commas or new lines (e.g., 0977123456, 0966987654, 0955112233)" oninput="analyzeRecipients()" class="w-full p-4 bg-white border border-slate-300 rounded-xl text-slate-800 font-mono text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all">0971234567, 0962345678, 0953456789, +260977999888</textarea>
-                        
-                        <!-- Network breakdown live badges -->
-                        <div id="networkStats" class="mt-3 flex flex-wrap gap-2 text-xs">
-                            <span class="inline-flex items-center px-2.5 py-1 rounded-md bg-red-50 text-red-700 border border-red-200 font-medium">
-                                <span class="w-1.5 h-1.5 rounded-full bg-red-600 mr-1.5"></span> Airtel: <strong id="countAirtel" class="ml-1">0</strong>
-                            </span>
-                            <span class="inline-flex items-center px-2.5 py-1 rounded-md bg-amber-50 text-amber-700 border border-amber-200 font-medium">
-                                <span class="w-1.5 h-1.5 rounded-full bg-amber-500 mr-1.5"></span> MTN: <strong id="countMtn" class="ml-1">0</strong>
-                            </span>
-                            <span class="inline-flex items-center px-2.5 py-1 rounded-md bg-blue-50 text-blue-700 border border-blue-200 font-medium">
-                                <span class="w-1.5 h-1.5 rounded-full bg-blue-600 mr-1.5"></span> Zamtel: <strong id="countZamtel" class="ml-1">0</strong>
-                            </span>
-                            <span class="inline-flex items-center px-2.5 py-1 rounded-md bg-slate-200 text-slate-700 font-medium">
-                                Total Valid: <strong id="countTotal" class="ml-1">0</strong>
-                            </span>
-                        </div>
-                    </div>
-
-                    <!-- Message Body -->
-                    <div>
-                        <div class="flex items-center justify-between mb-2">
-                            <label class="block text-sm font-semibold text-slate-700">Message Content</label>
-                            <span id="charCounter" class="text-xs font-mono text-slate-500 font-medium">0 chars | 1 part</span>
-                        </div>
-                        <textarea id="messageInput" rows="4" oninput="updateCharCount()" placeholder="Type your promotion, alert, or notification message here..." class="w-full p-4 bg-white border border-slate-300 rounded-xl text-slate-800 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all">Dear Customer, your electricity token recharge of K150 has been successful. Ref: ZESCO-99823. Thank you for using our service.</textarea>
-                    </div>
-
-                    <!-- Submit Campaign Button -->
-                    <button type="button" onclick="sendCampaign()" id="sendBtn" class="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-lg shadow-emerald-600/30 transition-all flex items-center justify-center space-x-2">
-                        <i class="fa-solid fa-paper-plane"></i>
-                        <span>Send Bulk Campaign Now</span>
-                    </button>
-                </div>
-
-                <!-- Right Live Simulation Dashboard / Results Box -->
-                <div class="lg:col-span-5 bg-slate-900 text-white p-6 sm:p-8 rounded-3xl shadow-2xl relative overflow-hidden flex flex-col justify-between min-h-[500px]">
-                    <div class="absolute -right-12 -top-12 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
-
-                    <div>
-                        <div class="flex items-center justify-between pb-6 border-b border-slate-800">
-                            <h4 class="font-bold text-base flex items-center">
-                                <i class="fa-solid fa-terminal text-emerald-400 mr-2.5"></i> Gateway Live Log & Stats
-                            </h4>
-                            <span id="gatewayStatusBadge" class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-                                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping mr-1.5"></span> Ready
-                            </span>
-                        </div>
-
-                        <div id="simulationOutput" class="py-8 space-y-6">
-                            <div class="text-center py-12 text-slate-400">
-                                <div class="w-16 h-16 bg-slate-800 rounded-2xl flex items-center justify-center mx-auto mb-4 text-slate-500 text-2xl">
-                                    <i class="fa-solid fa-mobile-screen-button"></i>
-                                </div>
-                                <p class="text-sm font-medium">Configure your campaign on the left and click <strong>"Send Bulk Campaign Now"</strong> to simulate instant routing across Zambian operators.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="pt-6 border-t border-slate-800 bg-slate-900/80">
-                        <div class="flex items-center justify-between text-sm">
-                            <span class="text-slate-400">Estimated Total Cost:</span>
-                            <span id="estimatedCostDisplay" class="text-xl font-mono font-bold text-emerald-400">K 0.00</span>
-                        </div>
-                        <p class="text-[11px] text-slate-500 mt-1">Calculated at standard ZMW rate (K 0.35/SMS part) with volume tiering applied.</p>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- Features Section -->
-    <section id="features" class="py-20 bg-slate-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto mb-16">
-                <span class="text-emerald-600 font-bold text-xs uppercase tracking-wider bg-emerald-100 px-3 py-1 rounded-full">Enterprise Features</span>
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-3">Built Specifically for the Zambian Market</h2>
-                <p class="text-slate-600 mt-3">Everything your enterprise, Sacco, church, or fintech needs to reach customers reliably via mobile.</p>
-            </div>
-
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-md transition-shadow">
-                    <div class="w-14 h-14 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-2xl mb-6">
-                        <i class="fa-solid fa-tower-broadcast"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-slate-900 mb-3">Direct Carrier Routing</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed">
-                        Direct SS7 and SMPP bindings with Airtel, MTN, and Zamtel ensure your SMS messages bypass low-quality gray routes for instant delivery.
-                    </p>
-                </div>
-
-                <div class="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-md transition-shadow">
-                    <div class="w-14 h-14 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center text-2xl mb-6">
-                        <i class="fa-solid fa-id-badge"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-slate-900 mb-3">Custom Sender IDs</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed">
-                        Send messages under your brand name (e.g., <em>ZESCO</em>, <em>FNB</em>, <em>Shoprite</em>). Quick ZICTA compliance support included.
-                    </p>
-                </div>
-
-                <div class="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-md transition-shadow">
-                    <div class="w-14 h-14 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center text-2xl mb-6">
-                        <i class="fa-solid fa-code"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-slate-900 mb-3">Robust Developer API</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed">
-                        Integrate our SMS gateway directly into your PHP, Python, Node.js or mobile app using our secure REST API and Webhooks.
-                    </p>
-                </div>
-
-                <div class="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-md transition-shadow">
-                    <div class="w-14 h-14 rounded-2xl bg-purple-100 text-purple-600 flex items-center justify-center text-2xl mb-6">
-                        <i class="fa-solid fa-file-excel"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-slate-900 mb-3">Excel & CSV Uploads</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed">
-                        Import thousands of contacts instantly with automatic duplicate removal and national number formatting (+260).
-                    </p>
-                </div>
-
-                <div class="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-md transition-shadow">
-                    <div class="w-14 h-14 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center text-2xl mb-6">
-                        <i class="fa-solid fa-chart-pie"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-slate-900 mb-3">Advanced Analytics</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed">
-                        Track delivered, pending, and failed statuses per carrier in real-time with comprehensive delivery reports.
-                    </p>
-                </div>
-
-                <div class="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-md transition-shadow">
-                    <div class="w-14 h-14 rounded-2xl bg-teal-100 text-teal-600 flex items-center justify-center text-2xl mb-6">
-                        <i class="fa-solid fa-wallet"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-slate-900 mb-3">Local Mobile Money Pay</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed">
-                        Top up your account balance instantly using Airtel Money, MTN MoMo, or Zamtel Kwacha alongside bank transfers and credit cards.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Network Coverage Section -->
-    <section id="coverage" class="py-20 bg-white border-t border-slate-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto mb-16">
-                <span class="text-emerald-600 font-bold text-xs uppercase tracking-wider bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100">Carrier Intelligence</span>
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-3">Seamless Zambian Network Integration</h2>
-                <p class="text-slate-600 mt-3">Our gateway automatically recognizes prefix patterns and routes your SMS payloads to the exact network subscriber.</p>
-            </div>
-
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="bg-gradient-to-b from-red-50/50 to-white p-8 rounded-3xl border border-red-100 shadow-sm">
-                    <div class="flex items-center justify-between mb-6">
-                        <div class="w-12 h-12 rounded-2xl bg-red-600 text-white flex items-center justify-center font-bold text-xl shadow-md shadow-red-600/20">
-                            A
-                        </div>
-                        <span class="text-xs font-bold uppercase tracking-wider bg-red-100 text-red-700 px-3 py-1 rounded-full">Direct HLR Route</span>
-                    </div>
-                    <h3 class="text-xl font-bold text-slate-900 mb-2">Airtel Zambia</h3>
-                    <p class="text-xs font-mono text-slate-500 mb-4">Prefixes: <strong class="text-slate-700">097, 077</strong> (+260)</p>
-                    <p class="text-slate-600 text-sm leading-relaxed">
-                        High-speed throughput connecting millions of Airtel subscribers across all 10 provinces of Zambia with instant DLR confirmations.
-                    </p>
-                </div>
-
-                <div class="bg-gradient-to-b from-amber-50/50 to-white p-8 rounded-3xl border border-amber-100 shadow-sm">
-                    <div class="flex items-center justify-between mb-6">
-                        <div class="w-12 h-12 rounded-2xl bg-amber-400 text-slate-900 flex items-center justify-center font-bold text-xl shadow-md shadow-amber-400/20">
-                            M
-                        </div>
-                        <span class="text-xs font-bold uppercase tracking-wider bg-amber-100 text-amber-800 px-3 py-1 rounded-full">Direct HLR Route</span>
-                    </div>
-                    <h3 class="text-xl font-bold text-slate-900 mb-2">MTN Zambia</h3>
-                    <p class="text-xs font-mono text-slate-500 mb-4">Prefixes: <strong class="text-slate-700">096, 076</strong> (+260)</p>
-                    <p class="text-slate-600 text-sm leading-relaxed">
-                        Optimized SMPP binds ensuring rapid transmission for OTPs, transactional alerts, and mass marketing campaigns to MTN users.
-                    </p>
-                </div>
-
-                <div class="bg-gradient-to-b from-blue-50/50 to-white p-8 rounded-3xl border border-blue-100 shadow-sm">
-                    <div class="flex items-center justify-between mb-6">
-                        <div class="w-12 h-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center font-bold text-xl shadow-md shadow-blue-600/20">
-                            Z
-                        </div>
-                        <span class="text-xs font-bold uppercase tracking-wider bg-blue-100 text-blue-800 px-3 py-1 rounded-full">Direct HLR Route</span>
-                    </div>
-                    <h3 class="text-xl font-bold text-slate-900 mb-2">Zamtel</h3>
-                    <p class="text-xs font-mono text-slate-500 mb-4">Prefixes: <strong class="text-slate-700">095, 075</strong> (+260)</p>
-                    <p class="text-slate-600 text-sm leading-relaxed">
-                        Complete nationwide coverage reaching remote and urban Zamtel subscribers with enterprise-grade reliability and security.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Pricing Section -->
-    <section id="pricing" class="py-20 bg-slate-50 border-t border-slate-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto mb-16">
-                <span class="text-emerald-600 font-bold text-xs uppercase tracking-wider bg-emerald-100 px-3 py-1 rounded-full">Transparent Pricing</span>
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-3">Affordable Rates in Zambian Kwacha (ZMW)</h2>
-                <p class="text-slate-600 mt-3">Pay-as-you-go or high-volume enterprise bundles with zero hidden setup fees. Credits never expire.</p>
-            </div>
-
-            <div class="grid md:grid-cols-3 gap-8 items-stretch">
-                <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between">
-                    <div>
-                        <div class="inline-block bg-slate-100 text-slate-800 font-bold text-xs px-3 py-1 rounded-full mb-4">Starter Pack</div>
-                        <h3 class="text-xl font-bold text-slate-900">Pay As You Go</h3>
-                        <p class="text-slate-500 text-sm mt-1">For small businesses and testing.</p>
-                        <div class="my-6">
-                            <span class="text-4xl font-extrabold text-slate-900">K 0.38</span>
-                            <span class="text-slate-500 text-sm"> / SMS part</span>
-                        </div>
-                        <ul class="space-y-3 text-sm text-slate-600 border-t border-slate-100 pt-6">
-                            <li class="flex items-center"><i class="fa-solid fa-check text-emerald-500 mr-2.5"></i> All Networks (Airtel, MTN, Zamtel)</li>
-                            <li class="flex items-center"><i class="fa-solid fa-check text-emerald-500 mr-2.5"></i> Custom Sender ID support</li>
-                            <li class="flex items-center"><i class="fa-solid fa-check text-emerald-500 mr-2.5"></i> Web Dashboard access</li>
-                            <li class="flex items-center text-slate-400"><i class="fa-solid fa-xmark text-slate-300 mr-2.5"></i> Dedicated API support</li>
-                        </ul>
-                    </div>
-                    <div class="pt-8">
-                        <button onclick="openModal('registerModal')" class="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded-xl transition-colors">Get Started</button>
-                    </div>
-                </div>
-
-                <div class="bg-slate-900 text-white p-8 rounded-3xl border-2 border-emerald-500 shadow-xl relative flex flex-col justify-between">
-                    <div class="absolute -top-3.5 left-1/2 transform -translate-x-1/2 bg-emerald-500 text-white font-bold text-xs px-4 py-1 rounded-full uppercase tracking-wider shadow">
-                        Most Popular
-                    </div>
-                    <div>
-                        <div class="inline-block bg-emerald-500/20 text-emerald-400 font-bold text-xs px-3 py-1 rounded-full mb-4">Business Bulk</div>
-                        <h3 class="text-xl font-bold text-white">Growth Bundle</h3>
-                        <p class="text-slate-400 text-sm mt-1">For growing SMEs & SACCOs.</p>
-                        <div class="my-6">
-                            <span class="text-4xl font-extrabold text-white">K 0.32</span>
-                            <span class="text-slate-400 text-sm"> / SMS part</span>
-                        </div>
-                        <ul class="space-y-3 text-sm text-slate-300 border-t border-slate-800 pt-6">
-                            <li class="flex items-center"><i class="fa-solid fa-check text-emerald-400 mr-2.5"></i> 10,000+ SMS Credits</li>
-                            <li class="flex items-center"><i class="fa-solid fa-check text-emerald-400 mr-2.5"></i> Direct Carrier Priority Routing</li>
-                            <li class="flex items-center"><i class="fa-solid fa-check text-emerald-400 mr-2.5"></i> Full REST API & Webhooks</li>
-                            <li class="flex items-center"><i class="fa-solid fa-check text-emerald-400 mr-2.5"></i> Excel & CSV Contact Importer</li>
-                        </ul>
-                    </div>
-                    <div class="pt-8">
-                        <button onclick="openModal('registerModal')" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-lg shadow-emerald-600/30 transition-all">Buy Bundle</button>
-                    </div>
-                </div>
-
-                <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between">
-                    <div>
-                        <div class="inline-block bg-purple-50 text-purple-700 font-bold text-xs px-3 py-1 rounded-full mb-4">Enterprise High Volume</div>
-                        <h3 class="text-xl font-bold text-slate-900">Corporate Scale</h3>
-                        <p class="text-slate-500 text-sm mt-1">For banks, fintechs & utilities.</p>
-                        <div class="my-6">
-                            <span class="text-4xl font-extrabold text-slate-900">K 0.27</span>
-                            <span class="text-slate-500 text-sm"> / SMS part</span>
-                        </div>
-                        <ul class="space-y-3 text-sm text-slate-600 border-t border-slate-100 pt-6">
-                            <li class="flex items-center"><i class="fa-solid fa-check text-emerald-500 mr-2.5"></i> 100,000+ SMS Credits</li>
-                            <li class="flex items-center"><i class="fa-solid fa-check text-emerald-500 mr-2.5"></i> Dedicated SMPP Account Bind</li>
-                            <li class="flex items-center"><i class="fa-solid fa-check text-emerald-500 mr-2.5"></i> Free Custom Sender ID setup</li>
-                            <li class="flex items-center"><i class="fa-solid fa-check text-emerald-500 mr-2.5"></i> 24/7 Priority Support Engineer</li>
-                        </ul>
-                    </div>
-                    <div class="pt-8">
-                        <button onclick="openModal('registerModal')" class="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded-xl transition-colors">Contact Sales</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- API Documentation Preview Section -->
-    <section id="api" class="py-20 bg-slate-900 text-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid lg:grid-cols-12 gap-12 items-center">
-                
-                <div class="lg:col-span-6 space-y-6">
-                    <span class="text-emerald-400 font-bold text-xs uppercase tracking-wider bg-emerald-500/20 px-3 py-1 rounded-full border border-emerald-500/30">Developer First</span>
-                    <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight">Integrate in Minutes with our Simple REST API</h2>
-                    <p class="text-slate-400 text-base leading-relaxed">
-                        Trigger OTP verifications, payment confirmations, and marketing notifications directly from your backend apps with robust delivery feedback.
-                    </p>
-                    <div class="space-y-4 pt-2">
-                        <div class="flex items-start space-x-3">
-                            <div class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs mt-0.5">
-                                <i class="fa-solid fa-check"></i>
-                            </div>
-                            <p class="text-sm text-slate-300">JSON Request & Response structures with standard HTTP status codes.</p>
-                        </div>
-                        <div class="flex items-start space-x-3">
-                            <div class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs mt-0.5">
-                                <i class="fa-solid fa-check"></i>
-                            </div>
-                            <p class="text-sm text-slate-300">Real-time webhook notifications for delivery reports (DLR).</p>
-                        </div>
-                        <div class="flex items-start space-x-3">
-                            <div class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs mt-0.5">
-                                <i class="fa-solid fa-check"></i>
-                            </div>
-                            <p class="text-sm text-slate-300">SDKs available for PHP, Python, NodeJS, and Java.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="lg:col-span-6">
-                    <div class="bg-slate-950 rounded-2xl border border-slate-800 shadow-2xl overflow-hidden">
-                        <div class="bg-slate-900 px-4 py-3 border-b border-slate-800 flex items-center justify-between">
-                            <div class="flex items-center space-x-2">
-                                <span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span>
-                                <span class="w-3 h-3 rounded-full bg-amber-500 inline-block"></span>
-                                <span class="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span>
-                                <span class="text-xs font-mono text-slate-400 ml-2">POST /v1/sms/send (PHP cURL Example)</span>
-                            </div>
-                            <button onclick="copyCodeSnippet()" class="text-xs text-slate-400 hover:text-white bg-slate-800 px-2.5 py-1 rounded transition-colors">
-                                <i class="fa-regular fa-copy mr-1"></i> Copy
-                            </button>
-                        </div>
-                        <div class="p-6 font-mono text-xs sm:text-sm text-emerald-300 overflow-x-auto leading-relaxed">
-<pre id="apiCodeBlock"><code>$curl = curl_init();
-
-curl_setopt_array($curl, [
-  CURLOPT_URL => "https://api.zambiabulksms.zm/v1/sms/send",
-  CURLOPT_RETURNTRANSFER => true,
-  CURLOPT_POST => true,
-  CURLOPT_POSTFIELDS => json_encode([
-    "sender_id" => "ZambiaAlert",
-    "recipients" => ["0977123456", "0966987654", "0955112233"],
-    "message" => "Your account balance is K450.00."
-  ]),
-  CURLOPT_HTTPHEADER => [
-    "Authorization: Bearer YOUR_API_KEY",
-    "Content-Type: application/json"
-  ],
-]);
-
-$response = curl_exec($curl);
-curl_close($curl);
-echo $response;</code></pre>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-slate-950 text-slate-400 py-16 border-t border-slate-900">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
-                
-                <div class="space-y-4 md:col-span-1">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-9 h-9 rounded-xl bg-emerald-600 flex items-center justify-center text-white font-bold">
-                            <i class="fa-solid fa-paper-plane text-sm"></i>
-                        </div>
-                        <span class="text-lg font-bold text-white">Zambia<span class="text-emerald-500">BulkSMS</span></span>
-                    </div>
-                    <p class="text-xs text-slate-400 leading-relaxed">
-                        The premier enterprise SMS gateway delivering uncompromising reliability across Airtel, MTN, and Zamtel networks in Zambia.
-                    </p>
-                    <div class="flex space-x-3 text-slate-400">
-                        <a href="#" class="w-8 h-8 rounded-lg bg-slate-900 hover:bg-emerald-600 hover:text-white flex items-center justify-center transition-colors"><i class="fa-brands fa-facebook-f text-xs"></i></a>
-                        <a href="#" class="w-8 h-8 rounded-lg bg-slate-900 hover:bg-emerald-600 hover:text-white flex items-center justify-center transition-colors"><i class="fa-brands fa-twitter text-xs"></i></a>
-                        <a href="#" class="w-8 h-8 rounded-lg bg-slate-900 hover:bg-emerald-600 hover:text-white flex items-center justify-center transition-colors"><i class="fa-brands fa-linkedin-in text-xs"></i></a>
-                    </div>
-                </div>
-
-                <div>
-                    <h4 class="text-white text-sm font-bold uppercase tracking-wider mb-4">Quick Links</h4>
-                    <ul class="space-y-2.5 text-xs">
-                        <li><a href="#features" class="hover:text-white transition-colors">Features & Benefits</a></li>
-                        <li><a href="#simulator" class="hover:text-white transition-colors">Bulk SMS Simulator</a></li>
-                        <li><a href="#coverage" class="hover:text-white transition-colors">Carrier Coverage</a></li>
-                        <li><a href="#pricing" class="hover:text-white transition-colors">Pricing Plans (ZMW)</a></li>
-                        <li><a href="#api" class="hover:text-white transition-colors">API Documentation</a></li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h4 class="text-white text-sm font-bold uppercase tracking-wider mb-4">Zambian Networks</h4>
-                    <ul class="space-y-2.5 text-xs">
-                        <li class="flex items-center space-x-2"><span class="w-2 h-2 rounded-full bg-red-600"></span><span>Airtel Zambia (097/07)</span></li>
-                        <li class="flex items-center space-x-2"><span class="w-2 h-2 rounded-full bg-amber-400"></span><span>MTN Zambia (096/06)</span></li>
-                        <li class="flex items-center space-x-2"><span class="w-2 h-2 rounded-full bg-blue-600"></span><span>Zamtel (095/05)</span></li>
-                        <li class="text-slate-500 pt-1">ZICTA Licensed Gateway Aggregator</li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h4 class="text-white text-sm font-bold uppercase tracking-wider mb-4">Support & Office</h4>
-                    <ul class="space-y-2.5 text-xs">
-                        <li class="flex items-center space-x-2"><i class="fa-solid fa-location-dot text-emerald-500"></i><span>Cairo Road, Lusaka, Zambia</span></li>
-                        <li class="flex items-center space-x-2"><i class="fa-solid fa-phone text-emerald-500"></i><span>+260 211 555 890</span></li>
-                        <li class="flex items-center space-x-2"><i class="fa-solid fa-envelope text-emerald-500"></i><span>support@zambiabulksms.zm</span></li>
-                        <li class="flex items-center space-x-2"><i class="fa-solid fa-clock text-emerald-500"></i><span>Mon - Sat: 08:00 - 18:00 CAT</span></li>
-                    </ul>
-                </div>
-
-            </div>
-
-            <div class="pt-8 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500">
-                <p>&copy; 2026 ZambiaBulkSMS Gateway Ltd. All rights reserved.</p>
-                <div class="flex space-x-6 mt-4 sm:mt-0">
-                    <a href="#" class="hover:text-slate-400">Privacy Policy</a>
-                    <a href="#" class="hover:text-slate-400">Terms of Service</a>
-                    <a href="#" class="hover:text-slate-400">Compliance (ZICTA)</a>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Universal Modal Component -->
-    <div id="authModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-md w-full p-8 shadow-2xl relative animate-in fade-in zoom-in duration-200">
-            <button onclick="closeModal()" class="absolute top-6 right-6 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center">
-                <i class="fa-solid fa-xmark text-sm"></i>
-            </button>
-            <div id="modalContentBody">
-                <!-- Dynamically injected -->
-            </div>
-        </div>
-    </div>
-
-    <!-- Custom Notification Toast -->
-    <div id="toastNotification" class="fixed bottom-6 right-6 z-50 bg-slate-900 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center space-x-3 transform translate-y-24 opacity-0 transition-all duration-300">
-        <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400 text-lg"></i>
-        <div>
-            <p id="toastTitle" class="text-xs font-bold text-white">Success</p>
-            <p id="toastMessage" class="text-xs text-slate-300">Action completed successfully.</p>
-        </div>
-    </div>
-
-    <!-- JavaScript Logic with Authentication & Sender IDs Persistence -->
-    <script>
-        // State Management
-        let appState = {
-            currentUser: null, // { email, company, phone, balance, senderIds }
-            senderIds: ["ZambiaAlert"]
-        };
-
-        // Initialize on DOM load
-        window.addEventListener('DOMContentLoaded', () => {
-            loadStateFromStorage();
-            analyzeRecipients();
-            updateCharCount();
-            updateNavUI();
-        });
-
-        // Local Storage Persistence Functions
-        function loadStateFromStorage() {
-            const savedUser = localStorage.getItem('zambia_sms_current_user');
-            const savedSenderIds = localStorage.getItem('zambia_sms_sender_ids');
-
-            if (savedUser) {
-                try {
-                    appState.currentUser = JSON.parse(savedUser);
-                } catch(e) { console.error(e); }
-            }
-
-            if (savedSenderIds) {
-                try {
-                    appState.senderIds = JSON.parse(savedSenderIds);
-                } catch(e) { console.error(e); }
-            } else {
-                appState.senderIds = ["ZambiaAlert", "LusakaTech"];
-            }
-
-            populateSenderIdDropdown();
-        }
-
-        function saveStateToStorage() {
-            if (appState.currentUser) {
-                localStorage.setItem('zambia_sms_current_user', JSON.stringify(appState.currentUser));
-            } else {
-                localStorage.removeItem('zambia_sms_current_user');
-            }
-            localStorage.setItem('zambia_sms_sender_ids', JSON.stringify(appState.senderIds));
-        }
-
-        // Mobile Menu Toggle
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const mobileMenu = document.getElementById('mobileMenu');
-        mobileMenuBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
-
-        // Navigation UI Sync
-        function updateNavUI() {
-            const navAuthContainer = document.getElementById('navAuthContainer');
-            const mobileAuthContainer = document.getElementById('mobileAuthContainer');
-            const userWalletBadge = document.getElementById('userWalletBadge');
-            const dashboardBalanceDisplay = document.getElementById('dashboardBalanceDisplay');
-
-            if (appState.currentUser) {
-                userWalletBadge.innerText = `${appState.currentUser.balance} Credits`;
-                dashboardBalanceDisplay.innerText = `K ${(appState.currentUser.balance * 0.35).toFixed(2)}`;
-
-                navAuthContainer.innerHTML = `
-                    <div class="flex items-center space-x-3">
-                        <div class="text-right hidden sm:block">
-                            <span class="block text-xs font-bold text-slate-900">${appState.currentUser.company}</span>
-                            <span class="block text-[10px] text-emerald-600 font-mono">${appState.currentUser.email}</span>
-                        </div>
-                        <button onclick="handleLogout()" class="bg-slate-100 hover:bg-red-50 text-slate-700 hover:text-red-600 text-xs font-semibold px-3.5 py-2 rounded-xl transition-all" title="Sign Out">
-                            <i class="fa-solid fa-right-from-bracket"></i> Logout
+                        <button onclick="openUploadModal()" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-xl transition">
+                            + Upload New Track
                         </button>
                     </div>
-                `;
+                    <div id="artistUploadsList" class="space-y-3 max-h-96 overflow-y-auto pr-1">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
 
-                mobileAuthContainer.innerHTML = `
-                    <div class="px-2 py-1 text-xs font-bold text-slate-800">${appState.currentUser.company}</div>
-                    <div class="px-2 pb-2 text-[11px] text-emerald-600">${appState.currentUser.email}</div>
-                    <button onclick="handleLogout()" class="w-full text-center py-2.5 text-sm font-semibold text-red-600 bg-red-50 rounded-xl">Sign Out</button>
-                `;
+                <!-- Purchased Music Library -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-bold text-white flex items-center space-x-2">
+                            <i class="fa-solid fa-download text-emerald-400"></i>
+                            <span>Purchased Tracks & Downloads</span>
+                        </h3>
+                        <span id="purchasesCount" class="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-400">0 items</span>
+                    </div>
+                    <div id="purchasedTracksList" class="space-y-3 max-h-96 overflow-y-auto pr-1">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FLOATING AUDIO PLAYER BAR -->
+    <div id="audioPlayerBar" class="fixed bottom-0 left-0 right-0 z-40 bg-slate-900/95 backdrop-blur-xl border-t border-slate-800 px-4 py-3 shadow-2xl transition-all duration-300">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            
+            <!-- Track Info -->
+            <div class="flex items-center space-x-3 w-full sm:w-1/4">
+                <img id="playerCover" src="https://placehold.co/100x100/1e1b4b/indigo?text=AirSound" alt="Cover" class="w-12 h-12 rounded-xl object-cover border border-slate-800 shadow">
+                <div class="min-w-0 flex-1">
+                    <h4 id="playerTitle" class="text-sm font-bold text-white truncate">Select a track to play</h4>
+                    <p id="playerArtist" class="text-xs text-slate-400 truncate">AirSound Artist</p>
+                </div>
+            </div>
+
+            <!-- Controls & Waveform Simulation -->
+            <div class="flex flex-col items-center w-full sm:w-2/5 space-y-1">
+                <div class="flex items-center space-x-4">
+                    <button onclick="prevTrack()" class="text-slate-400 hover:text-white transition text-sm"><i class="fa-solid fa-backward-step"></i></button>
+                    <button onclick="togglePlayPause()" id="playPauseBtn" class="w-10 h-10 rounded-full bg-indigo-600 hover:bg-indigo-500 text-white flex items-center justify-center shadow-lg shadow-indigo-600/30 transition transform active:scale-95">
+                        <i id="playPauseIcon" class="fa-solid fa-play ml-0.5"></i>
+                    </button>
+                    <button onclick="nextTrack()" class="text-slate-400 hover:text-white transition text-sm"><i class="fa-solid fa-forward-step"></i></button>
+                </div>
+                <div class="w-full flex items-center space-x-2 text-[10px] text-slate-400 font-medium">
+                    <span id="currentTimeLabel">0:00</span>
+                    <input type="range" id="progressBar" value="0" min="0" max="100" oninput="seekAudio(this.value)" class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-indigo-500">
+                    <span id="durationLabel">0:30</span>
+                </div>
+            </div>
+
+            <!-- Volume & Buy Button -->
+            <div class="flex items-center justify-end space-x-4 w-full sm:w-1/4">
+                <div class="hidden md:flex items-center space-x-2 text-slate-400 text-xs">
+                    <i class="fa-solid fa-volume-high"></i>
+                    <input type="range" id="volumeBar" value="80" min="0" max="100" oninput="setVolume(this.value)" class="w-20 h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-indigo-500">
+                </div>
+                <div>
+                    <button onclick="buyCurrentTrack()" id="playerBuyBtn" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl shadow transition flex items-center space-x-1.5">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        <span id="playerPriceLabel">K150.00</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CART & CHECKOUT DRAWER -->
+    <div id="cartDrawer" class="fixed inset-0 z-50 overflow-hidden hidden">
+        <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm transition-opacity" onclick="toggleCartDrawer()"></div>
+        <div class="absolute inset-y-0 right-0 max-w-full flex pl-10">
+            <div class="w-screen max-w-md bg-slate-900 border-l border-slate-800 shadow-2xl flex flex-col">
+                <div class="p-6 border-b border-slate-800 flex items-center justify-between">
+                    <h3 class="text-lg font-bold text-white flex items-center space-x-2">
+                        <i class="fa-solid fa-cart-shopping text-indigo-400"></i>
+                        <span>Your Cart (<span id="cartCountHeader">0</span>)</span>
+                    </h3>
+                    <button onclick="toggleCartDrawer()" class="text-slate-400 hover:text-white p-2 rounded-lg hover:bg-slate-800 transition">
+                        <i class="fa-solid fa-xmark text-lg"></i>
+                    </button>
+                </div>
+
+                <div id="cartItemsContainer" class="flex-1 overflow-y-auto p-6 space-y-4 divide-y divide-slate-800/50">
+                    <!-- Populated by JS -->
+                </div>
+
+                <div class="p-6 border-t border-slate-800 bg-slate-950 space-y-4">
+                    <div class="flex space-x-2">
+                        <input type="text" id="promoInput" placeholder="Promo code (e.g. AIRSOUND10)" class="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
+                        <button onclick="applyPromo()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold rounded-xl transition">Apply</button>
+                    </div>
+
+                    <div class="space-y-1.5 text-sm">
+                        <div class="flex justify-between text-slate-400 text-xs">
+                            <span>Subtotal</span>
+                            <span id="cartSubtotal">K0.00</span>
+                        </div>
+                        <div id="discountRow" class="flex justify-between text-emerald-400 text-xs hidden">
+                            <span>Discount (10%)</span>
+                            <span id="cartDiscount">-K0.00</span>
+                        </div>
+                        <div class="flex justify-between text-white font-bold text-base pt-2 border-t border-slate-800">
+                            <span>Total</span>
+                            <span id="cartTotal">K0.00</span>
+                        </div>
+                    </div>
+
+                    <button onclick="openCheckoutModal()" class="w-full py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-sm rounded-xl shadow-lg shadow-emerald-600/30 transition transform active:scale-98">
+                        Proceed to Secure Checkout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SELL MUSIC PORTAL (UPLOAD MODAL) -->
+    <div id="uploadModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
+        <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" onclick="closeUploadModal()"></div>
+        <div class="relative w-full max-w-lg bg-slate-900 border border-slate-800 rounded-3xl shadow-2xl p-6 sm:p-8 overflow-hidden z-10 space-y-6">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                <div>
+                    <h3 class="text-xl font-extrabold text-white">Sell Your Music on AirSound</h3>
+                    <p class="text-xs text-slate-400">List beats or songs instantly to the global marketplace.</p>
+                </div>
+                <button onclick="closeUploadModal()" class="text-slate-400 hover:text-white p-2 rounded-lg hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <form id="uploadForm" onsubmit="handleUploadSubmit(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Track or Beat Title</label>
+                    <input type="text" id="upTitle" required placeholder="e.g., Lusaka Sunset Vibe" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Artist / Producer Name</label>
+                        <input type="text" id="upArtist" required placeholder="e.g., DJ Kasi" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Genre</label>
+                        <select id="upGenre" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+                            <option value="Afrobeat">Afrobeat</option>
+                            <option value="Amapiano">Amapiano</option>
+                            <option value="Trap">Trap / HipHop</option>
+                            <option value="Dancehall">Dancehall</option>
+                            <option value="R&B">R&B / Soul</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Price (ZMW)</label>
+                        <input type="number" id="upPriceZMW" required min="0" step="5" value="150" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">BPM (Tempo)</label>
+                        <input type="number" id="upBpm" required min="60" max="180" value="115" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Cover Art URL</label>
+                    <input type="url" id="upCover" placeholder="https://images.unsplash.com/photo-..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-indigo-500" value="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=500&q=80">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Audio File Upload Simulation (.WAV / .MP3)</label>
+                    <div class="flex items-center justify-center w-full">
+                        <label class="flex flex-col items-center justify-center w-full h-24 border-2 border-slate-800 border-dashed rounded-xl cursor-pointer bg-slate-950 hover:bg-slate-900 transition">
+                            <div class="flex flex-col items-center justify-center pt-3 pb-3">
+                                <i class="fa-solid fa-cloud-arrow-up text-indigo-400 text-xl mb-1"></i>
+                                <p class="text-xs text-slate-400"><span class="font-semibold text-slate-300">Click to upload</span> or drag and drop audio stems</p>
+                            </div>
+                            <input type="file" class="hidden" />
+                        </label>
+                    </div>
+                </div>
+
+                <div class="pt-2 flex space-x-3">
+                    <button type="button" onclick="closeUploadModal()" class="flex-1 py-3 bg-slate-800 hover:bg-slate-700 text-white font-semibold text-sm rounded-xl transition">Cancel</button>
+                    <button type="submit" class="flex-1 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm rounded-xl shadow-lg shadow-indigo-600/30 transition">Publish Track</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- CHECKOUT MODAL -->
+    <div id="checkoutModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
+        <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" onclick="closeCheckoutModal()"></div>
+        <div class="relative w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl shadow-2xl p-6 sm:p-8 z-10 space-y-6">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                <div>
+                    <h3 class="text-xl font-extrabold text-white">Complete Purchase</h3>
+                    <p class="text-xs text-slate-400">256-Bit Encrypted Secure Checkout.</p>
+                </div>
+                <button onclick="closeCheckoutModal()" class="text-slate-400 hover:text-white p-2 rounded-lg hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-2">Select Payment Method</label>
+                    <div class="grid grid-cols-3 gap-3">
+                        <button type="button" onclick="setPaymentMethod('momo')" id="pmMomo" class="p-3 bg-indigo-600 border border-indigo-500 rounded-xl text-center transition font-semibold text-xs text-white">
+                            <i class="fa-solid fa-mobile-screen mb-1 block text-lg"></i>Mobile Money
+                        </button>
+                        <button type="button" onclick="setPaymentMethod('card')" id="pmCard" class="p-3 bg-slate-950 border border-slate-800 rounded-xl text-center transition font-semibold text-xs text-slate-400 hover:text-white">
+                            <i class="fa-solid fa-credit-card mb-1 block text-lg"></i>Bank Card
+                        </button>
+                        <button type="button" onclick="setPaymentMethod('paypal')" id="pmPaypal" class="p-3 bg-slate-950 border border-slate-800 rounded-xl text-center transition font-semibold text-xs text-slate-400 hover:text-white">
+                            <i class="fa-brands fa-paypal mb-1 block text-lg"></i>PayPal
+                        </button>
+                    </div>
+                </div>
+
+                <div id="paymentDetailsContainer" class="space-y-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Mobile Money Number / Provider</label>
+                        <div class="flex space-x-2">
+                            <select id="momoProvider" class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-xs text-slate-200 focus:outline-none">
+                                <option value="MTN">MTN MoMo</option>
+                                <option value="Airtel">Airtel Money</option>
+                                <option value="Zamtel">Zamtel Kwacha</option>
+                            </select>
+                            <input type="tel" id="momoNumber" placeholder="+260 97..." class="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-indigo-500" value="+260 96">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-2 text-xs">
+                    <div class="flex justify-between text-slate-400">
+                        <span>Items Total</span>
+                        <span id="checkoutItemsTotal">K0.00</span>
+                    </div>
+                    <div class="flex justify-between text-slate-400">
+                        <span>Instant Delivery</span>
+                        <span class="text-emerald-400">Free WAV + Stems</span>
+                    </div>
+                    <div class="flex justify-between text-white font-bold text-sm pt-2 border-t border-slate-800">
+                        <span>Total Due</span>
+                        <span id="checkoutFinalTotal" class="text-emerald-400">K0.00</span>
+                    </div>
+                </div>
+
+                <button onclick="processCheckout()" class="w-full py-3.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-sm rounded-xl shadow-lg shadow-emerald-600/30 transition transform active:scale-98">
+                    Authorise & Pay Now
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT APPLICATION LOGIC -->
+    <script>
+        const USD_TO_ZMW = 28.5;
+
+        const defaultTracks = [
+            {
+                id: 'track-1',
+                title: 'Lusaka Sunset Vibe',
+                artist: 'DJ Kasi Beats',
+                genre: 'Afrobeat',
+                priceZMW: 180,
+                bpm: 112,
+                cover: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=500&q=80',
+                likes: 342,
+                plays: '14.2k'
+            },
+            {
+                id: 'track-2',
+                title: 'Copperbelt Bounce',
+                artist: 'Producer Shaba',
+                genre: 'Amapiano',
+                priceZMW: 200,
+                bpm: 114,
+                cover: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=500&q=80',
+                likes: 512,
+                plays: '22.8k'
+            },
+            {
+                id: 'track-3',
+                title: 'Zambezi Midnight Trap',
+                artist: 'Njelele X',
+                genre: 'Trap',
+                priceZMW: 150,
+                bpm: 140,
+                cover: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=500&q=80',
+                likes: 289,
+                plays: '9.4k'
+            },
+            {
+                id: 'track-4',
+                title: 'Victoria Falls Groove',
+                artist: 'AfroSoul Zambia',
+                genre: 'Afrobeat',
+                priceZMW: 220,
+                bpm: 108,
+                cover: 'https://images.unsplash.com/photo-1511252174215-9aec9fc51bf1?auto=format&fit=crop&w=500&q=80',
+                likes: 410,
+                plays: '18.1k'
+            },
+            {
+                id: 'track-5',
+                title: 'Kabwe Heavy Bass',
+                artist: 'BeatSmith Pro',
+                genre: 'Dancehall',
+                priceZMW: 130,
+                bpm: 100,
+                cover: 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=500&q=80',
+                likes: 195,
+                plays: '6.7k'
+            },
+            {
+                id: 'track-6',
+                title: 'Savannah Soulmate',
+                artist: 'Lunga Melodies',
+                genre: 'R&B',
+                priceZMW: 170,
+                bpm: 92,
+                cover: 'https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=500&q=80',
+                likes: 312,
+                plays: '11.5k'
+            }
+        ];
+
+        // Persistent Storage Initialisation
+        let tracks = JSON.parse(localStorage.getItem('airsound_tracks')) || defaultTracks;
+        let cart = JSON.parse(localStorage.getItem('airsound_cart')) || [];
+        let purchases = JSON.parse(localStorage.getItem('airsound_purchases')) || [];
+        let userUploads = JSON.parse(localStorage.getItem('airsound_uploads')) || [];
+        let currentCurrency = localStorage.getItem('airsound_currency') || 'ZMW';
+        let currentFilter = 'All';
+        let searchQuery = '';
+        let currentSort = 'popular';
+        let currentRole = 'buyer';
+
+        let currentPlayingTrackId = null;
+        let isPlaying = false;
+        let audioProgressTimer = null;
+        let currentProgress = 0;
+        let discountActive = false;
+        let paymentMethod = 'momo';
+
+        window.onload = function() {
+            renderTracks();
+            updateCartUI();
+            updateDashboardStats();
+            renderDashboardLists();
+            setCurrency(currentCurrency);
+            setRole(currentRole);
+        };
+
+        function formatPrice(priceInZMW) {
+            if (currentCurrency === 'USD') {
+                return `$${(priceInZMW / USD_TO_ZMW).toFixed(2)}`;
+            }
+            return `K${priceInZMW.toFixed(2)}`;
+        }
+
+        function setCurrency(curr) {
+            currentCurrency = curr;
+            localStorage.setItem('airsound_currency', curr);
+            if(curr === 'ZMW') {
+                document.getElementById('currZMW').className = 'px-2.5 py-1 rounded-lg font-bold bg-brand-600 text-white transition';
+                document.getElementById('currUSD').className = 'px-2.5 py-1 rounded-lg font-medium text-slate-400 hover:text-white transition';
             } else {
-                userWalletBadge.innerText = `50 Credits`;
-                dashboardBalanceDisplay.innerText = `K 17.50`;
+                document.getElementById('currUSD').className = 'px-2.5 py-1 rounded-lg font-bold bg-brand-600 text-white transition';
+                document.getElementById('currZMW').className = 'px-2.5 py-1 rounded-lg font-medium text-slate-400 hover:text-white transition';
+            }
+            renderTracks();
+            renderDashboardLists();
+            updateCartUI();
+        }
 
-                navAuthContainer.innerHTML = `
-                    <button onclick="openModal('loginModal')" class="text-sm font-semibold text-slate-700 hover:text-emerald-600 px-4 py-2 transition-colors">
-                        Sign In
-                    </button>
-                    <button onclick="openModal('registerModal')" class="bg-slate-900 hover:bg-emerald-600 text-white text-sm font-semibold px-5 py-2.5 rounded-xl shadow-sm hover:shadow-md transition-all duration-200">
-                        Get Free Credits
-                    </button>
-                `;
-
-                mobileAuthContainer.innerHTML = `
-                    <button onclick="openModal('loginModal')" class="w-full text-center py-2.5 text-sm font-semibold text-slate-700 border border-slate-200 rounded-xl">Sign In</button>
-                    <button onclick="openModal('registerModal')" class="w-full text-center py-2.5 text-sm font-semibold text-white bg-emerald-600 rounded-xl shadow">Get Free Credits</button>
-                `;
+        function setRole(role) {
+            currentRole = role;
+            if(role === 'buyer') {
+                document.getElementById('buyerModeBtn').className = 'px-3 py-1.5 rounded-lg transition text-white bg-indigo-600 shadow';
+                document.getElementById('artistModeBtn').className = 'px-3 py-1.5 rounded-lg transition text-slate-400 hover:text-white';
+                document.getElementById('userRoleLabel').innerText = 'My Library';
+            } else {
+                document.getElementById('artistModeBtn').className = 'px-3 py-1.5 rounded-lg transition text-white bg-indigo-600 shadow';
+                document.getElementById('buyerModeBtn').className = 'px-3 py-1.5 rounded-lg transition text-slate-400 hover:text-white';
+                document.getElementById('userRoleLabel').innerText = 'Artist Dashboard';
             }
         }
 
-        // Sender ID Dropdown Population
-        function populateSenderIdDropdown() {
-            const select = document.getElementById('senderIdSelect');
-            if (!select) return;
-            const currentVal = select.value;
-            select.innerHTML = '';
-            appState.senderIds.forEach(id => {
-                const opt = document.createElement('option');
-                opt.value = id;
-                opt.innerText = id;
-                if (id === currentVal) opt.selected = true;
-                select.appendChild(opt);
-            });
+        function switchTab(tabName) {
+            const exploreTab = document.getElementById('exploreTab');
+            const dashboardTab = document.getElementById('dashboardTab');
+            const btnExplore = document.getElementById('tabExploreBtn');
+            const btnDashboard = document.getElementById('tabDashboardBtn');
+
+            if(tabName === 'explore') {
+                exploreTab.classList.remove('hidden');
+                dashboardTab.classList.add('hidden');
+                btnExplore.className = 'px-4 py-2 rounded-xl text-sm font-semibold transition bg-indigo-600 text-white shadow-lg shadow-indigo-600/20 whitespace-nowrap';
+                btnDashboard.className = 'px-4 py-2 rounded-xl text-sm font-semibold transition text-slate-400 hover:text-white hover:bg-slate-900 whitespace-nowrap';
+            } else {
+                exploreTab.classList.add('hidden');
+                dashboardTab.classList.remove('hidden');
+                btnDashboard.className = 'px-4 py-2 rounded-xl text-sm font-semibold transition bg-indigo-600 text-white shadow-lg shadow-indigo-600/20 whitespace-nowrap';
+                btnExplore.className = 'px-4 py-2 rounded-xl text-sm font-semibold transition text-slate-400 hover:text-white hover:bg-slate-900 whitespace-nowrap';
+                renderDashboardLists();
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Open Sender ID registration modal
-        function openSenderIdModal() {
-            if (!appState.currentUser) {
-                showToast("Authentication Required", "Please sign in to register a custom Sender ID.", "error");
-                openModal('loginModal');
+        function filterGenre(genre) {
+            currentFilter = genre;
+            document.getElementById('sectionTitle').innerText = genre === 'All' ? 'Trending Beats & Tracks' : `${genre} Beats & Songs`;
+            renderTracks();
+        }
+
+        function handleSearch(query) {
+            searchQuery = query.toLowerCase();
+            renderTracks();
+        }
+
+        function sortTracks(criteria) {
+            currentSort = criteria;
+            renderTracks();
+        }
+
+        function renderTracks() {
+            const grid = document.getElementById('tracksGrid');
+            let filtered = tracks.filter(t => {
+                const matchGenre = currentFilter === 'All' || t.genre === currentFilter;
+                const matchSearch = t.title.toLowerCase().includes(searchQuery) || t.artist.toLowerCase().includes(searchQuery) || t.genre.toLowerCase().includes(searchQuery);
+                return matchGenre && matchSearch;
+            });
+
+            if(currentSort === 'popular') filtered.sort((a,b) => b.likes - a.likes);
+            else if(currentSort === 'newest') filtered.reverse();
+            else if(currentSort === 'price-low') filtered.sort((a,b) => a.priceZMW - b.priceZMW);
+            else if(currentSort === 'price-high') filtered.sort((a,b) => b.priceZMW - a.priceZMW);
+
+            if(filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full py-16 text-center space-y-3 bg-slate-900/50 border border-slate-800 rounded-3xl">
+                        <div class="w-12 h-12 rounded-full bg-slate-800 text-slate-400 flex items-center justify-center mx-auto text-xl"><i class="fa-solid fa-music"></i></div>
+                        <h4 class="text-base font-bold text-white">No tracks found</h4>
+                        <p class="text-xs text-slate-400">Try adjusting your search terms or genre filter.</p>
+                    </div>
+                `;
                 return;
             }
 
-            const modal = document.getElementById('authModal');
-            const body = document.getElementById('modalContentBody');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
+            grid.innerHTML = filtered.map(t => {
+                const isCurrent = currentPlayingTrackId === t.id;
+                const isPurchased = purchases.some(p => p.id === t.id);
+                const inCart = cart.some(c => c.id === t.id);
 
-            body.innerHTML = `
-                <h3 class="text-2xl font-extrabold text-slate-900 mb-2">Register Sender ID</h3>
-                <p class="text-sm text-slate-500 mb-6">Add an approved alphanumeric brand name (max 11 chars).</p>
-                <form onsubmit="handleRegisterSenderId(event)" class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Sender ID Name</label>
-                        <input type="text" id="newSenderIdInput" required maxlength="11" placeholder="e.g. MYCOmpany" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm uppercase font-mono focus:ring-2 focus:ring-emerald-500 outline-none">
-                        <p class="text-[11px] text-slate-400 mt-1">Must be registered with ZICTA compliance guidelines.</p>
+                return `
+                    <div class="bg-slate-900 border border-slate-800/80 hover:border-indigo-500/50 rounded-3xl p-4 transition-all duration-300 group hover:shadow-xl hover:shadow-indigo-500/10 flex flex-col justify-between space-y-4">
+                        <div class="relative rounded-2xl overflow-hidden aspect-square bg-slate-950">
+                            <img src="${t.cover}" alt="${t.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://placehold.co/400x400/1e1b4b/indigo?text=AirSound'">
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition flex items-end p-4 justify-between">
+                                <button onclick="playTrack('${t.id}')" class="w-12 h-12 rounded-full bg-indigo-600 text-white flex items-center justify-center shadow-lg transform active:scale-95 transition">
+                                    <i class="fa-solid ${isCurrent && isPlaying ? 'fa-pause' : 'fa-play'} ml-0.5 text-base"></i>
+                                </button>
+                                <span class="px-2.5 py-1 rounded-full bg-slate-900/80 backdrop-blur-md text-[10px] font-bold text-white border border-slate-700">${t.bpm} BPM</span>
+                            </div>
+                            <span class="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-slate-950/70 backdrop-blur-md text-[10px] font-semibold text-indigo-300 border border-slate-800">${t.genre}</span>
+                        </div>
+
+                        <div class="space-y-1">
+                            <h3 class="text-sm font-bold text-white truncate">${t.title}</h3>
+                            <p class="text-xs text-slate-400 truncate">${t.artist}</p>
+                        </div>
+
+                        <div class="pt-2 border-t border-slate-800/80 flex items-center justify-between">
+                            <div>
+                                <span class="text-[10px] text-slate-400 block">License Price</span>
+                                <span class="text-sm font-extrabold text-emerald-400">${formatPrice(t.priceZMW)}</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                ${isPurchased ? `
+                                    <span class="px-3 py-1.5 bg-emerald-500/20 text-emerald-400 text-xs font-semibold rounded-xl flex items-center space-x-1">
+                                        <i class="fa-solid fa-check"></i><span>Owned</span>
+                                    </span>
+                                ` : `
+                                    <button onclick="addToCart('${t.id}')" class="px-3 py-1.5 ${inCart ? 'bg-indigo-600 text-white' : 'bg-slate-800 hover:bg-slate-700 text-slate-200'} text-xs font-semibold rounded-xl transition flex items-center space-x-1">
+                                        <i class="fa-solid ${inCart ? 'fa-check' : 'fa-cart-plus'}"></i>
+                                        <span>${inCart ? 'In Cart' : 'Buy Beat'}</span>
+                                    </button>
+                                `}
+                            </div>
+                        </div>
                     </div>
-                    <button type="submit" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-md transition-all">Submit for Instant Activation</button>
-                </form>
-            `;
+                `;
+            }).join('');
         }
 
-        function handleRegisterSenderId(e) {
-            e.preventDefault();
-            const val = document.getElementById('newSenderIdInput').value.trim().toUpperCase();
-            if (val && !appState.senderIds.includes(val)) {
-                appState.senderIds.push(val);
-                saveStateToStorage();
-                populateSenderIdDropdown();
-                document.getElementById('senderIdSelect').value = val;
-                closeModal();
-                showToast("Sender ID Added", `Sender ID "${val}" successfully registered and selected.`, "success");
+        function playTrack(id) {
+            const track = tracks.find(t => t.id === id);
+            if(!track) return;
+
+            if(currentPlayingTrackId === id) {
+                togglePlayPause();
+                return;
+            }
+
+            currentPlayingTrackId = id;
+            isPlaying = true;
+            currentProgress = 0;
+
+            document.getElementById('playerCover').src = track.cover;
+            document.getElementById('playerTitle').innerText = track.title;
+            document.getElementById('playerArtist').innerText = track.artist;
+            document.getElementById('playerPriceLabel').innerText = formatPrice(track.priceZMW);
+            document.getElementById('playPauseIcon').className = 'fa-solid fa-pause';
+
+            startProgressSimulation();
+        }
+
+        function togglePlayPause() {
+            if(!currentPlayingTrackId) {
+                if(tracks.length > 0) playTrack(tracks[0].id);
+                return;
+            }
+            isPlaying = !isPlaying;
+            document.getElementById('playPauseIcon').className = isPlaying ? 'fa-solid fa-pause' : 'fa-solid fa-play ml-0.5';
+            if(isPlaying) startProgressSimulation();
+            else clearInterval(audioProgressTimer);
+        }
+
+        function startProgressSimulation() {
+            clearInterval(audioProgressTimer);
+            audioProgressTimer = setInterval(() => {
+                if(!isPlaying) return;
+                currentProgress += 1;
+                if(currentProgress > 30) currentProgress = 0;
+                document.getElementById('progressBar').value = (currentProgress / 30) * 100;
+                let secs = currentProgress < 10 ? `0${currentProgress}` : currentProgress;
+                document.getElementById('currentTimeLabel').innerText = `0:${secs}`;
+            }, 1000);
+        }
+
+        function seekAudio(val) {
+            currentProgress = Math.floor((val / 100) * 30);
+            let secs = currentProgress < 10 ? `0${currentProgress}` : currentProgress;
+            document.getElementById('currentTimeLabel').innerText = `0:${secs}`;
+        }
+
+        function setVolume(val) {}
+
+        function nextTrack() {
+            if(!currentPlayingTrackId) return;
+            const idx = tracks.findIndex(t => t.id === currentPlayingTrackId);
+            playTrack(tracks[(idx + 1) % tracks.length].id);
+        }
+
+        function prevTrack() {
+            if(!currentPlayingTrackId) return;
+            const idx = tracks.findIndex(t => t.id === currentPlayingTrackId);
+            playTrack(tracks[(idx - 1 + tracks.length) % tracks.length].id);
+        }
+
+        function buyCurrentTrack() {
+            if(!currentPlayingTrackId) return;
+            const track = tracks.find(t => t.id === currentPlayingTrackId);
+            if(!cart.some(c => c.id === track.id)) {
+                cart.push(track);
+                localStorage.setItem('airsound_cart', JSON.stringify(cart));
+                updateCartUI();
+            }
+            toggleCartDrawer();
+        }
+
+        function toggleCartDrawer() {
+            document.getElementById('cartDrawer').classList.toggle('hidden');
+        }
+
+        function addToCart(id) {
+            const track = tracks.find(t => t.id === id);
+            if(!track) return;
+            if(purchases.some(p => p.id === id)) {
+                showToast('Already Owned', 'You already own this track license.', 'info');
+                return;
+            }
+
+            const existingIdx = cart.findIndex(c => c.id === id);
+            if(existingIdx > -1) {
+                cart.splice(existingIdx, 1);
+                showToast('Removed', 'Track removed from cart.', 'info');
             } else {
-                showToast("Error", "Sender ID already exists or is invalid.", "error");
+                cart.push(track);
+                showToast('Added to Cart', `${track.title} added to your cart.`);
+            }
+            localStorage.setItem('airsound_cart', JSON.stringify(cart));
+            updateCartUI();
+            renderTracks();
+        }
+
+        function removeFromCart(id) {
+            cart = cart.filter(c => c.id !== id);
+            localStorage.setItem('airsound_cart', JSON.stringify(cart));
+            updateCartUI();
+            renderTracks();
+        }
+
+        function updateCartUI() {
+            const badge = document.getElementById('cartBadge');
+            const countHeader = document.getElementById('cartCountHeader');
+            const container = document.getElementById('cartItemsContainer');
+
+            badge.innerText = cart.length;
+            countHeader.innerText = cart.length;
+            if(cart.length > 0) badge.classList.remove('hidden');
+            else badge.classList.add('hidden');
+
+            if(cart.length === 0) {
+                container.innerHTML = `
+                    <div class="py-12 text-center space-y-2">
+                        <i class="fa-solid fa-cart-shopping text-3xl text-slate-700"></i>
+                        <p class="text-xs text-slate-400">Your cart is currently empty.</p>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = cart.map(item => `
+                    <div class="pt-4 first:pt-0 flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <img src="${item.cover}" class="w-12 h-12 rounded-xl object-cover border border-slate-800">
+                            <div>
+                                <h4 class="text-sm font-bold text-white truncate">${item.title}</h4>
+                                <p class="text-xs text-slate-400">${item.artist}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <span class="text-sm font-bold text-emerald-400">${formatPrice(item.priceZMW)}</span>
+                            <button onclick="removeFromCart('${item.id}')" class="text-slate-500 hover:text-rose-400 p-1"><i class="fa-solid fa-trash-can"></i></button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            let subtotal = cart.reduce((acc, item) => acc + item.priceZMW, 0);
+            let discount = discountActive ? subtotal * 0.10 : 0;
+            let total = subtotal - discount;
+
+            document.getElementById('cartSubtotal').innerText = formatPrice(subtotal);
+            document.getElementById('cartTotal').innerText = formatPrice(total);
+            if(discountActive) {
+                document.getElementById('discountRow').classList.remove('hidden');
+                document.getElementById('cartDiscount').innerText = `-${formatPrice(discount)}`;
+            } else {
+                document.getElementById('discountRow').classList.add('hidden');
             }
         }
 
-        // Sample number lists loader
-        function loadSampleNumbers(type) {
-            const textarea = document.getElementById('recipientsInput');
-            if (type === 'mixed') {
-                textarea.value = "0977123456, 0966987654, 0955112233, 0771223344, 0765544332, 0759988776, +260971112233, +260962223344, +260953334455";
+        function applyPromo() {
+            const code = document.getElementById('promoInput').value.trim().toUpperCase();
+            if(code === 'AIRSOUND10' || code === 'LUSAKA2026') {
+                discountActive = true;
+                showToast('Promo Applied', '10% discount successfully applied!');
+                updateCartUI();
+            } else {
+                showToast('Invalid Code', 'Try code AIRSOUND10', 'error');
             }
-            analyzeRecipients();
-            showToast("Sample List Loaded", "Loaded 9 Zambian test numbers spanning Airtel, MTN, and Zamtel.", "success");
         }
 
-        function clearNumbers() {
-            document.getElementById('recipientsInput').value = "";
-            analyzeRecipients();
+        function openCheckoutModal() {
+            if(cart.length === 0) {
+                showToast('Cart Empty', 'Add beats to cart before checking out.', 'error');
+                return;
+            }
+            toggleCartDrawer();
+            document.getElementById('checkoutModal').classList.remove('hidden');
+
+            let subtotal = cart.reduce((acc, item) => acc + item.priceZMW, 0);
+            let discount = discountActive ? subtotal * 0.10 : 0;
+            let total = subtotal - discount;
+
+            document.getElementById('checkoutItemsTotal').innerText = formatPrice(subtotal);
+            document.getElementById('checkoutFinalTotal').innerText = formatPrice(total);
         }
 
-        // Analyze and detect Zambian Networks
-        function analyzeRecipients() {
-            const rawText = document.getElementById('recipientsInput').value;
-            const tokens = rawText.split(/[\s,\n]+/);
-            
-            let airtelCount = 0;
-            let mtnCount = 0;
-            let zamtelCount = 0;
-            let totalValid = 0;
+        function closeCheckoutModal() {
+            document.getElementById('checkoutModal').classList.add('hidden');
+        }
 
-            tokens.forEach(token => {
-                let cleaned = token.trim().replace(/\D/g, '');
-                if (cleaned.length >= 9) {
-                    let prefix = "";
-                    if (cleaned.startsWith('260') && cleaned.length >= 12) {
-                        prefix = cleaned.substring(3, 5);
-                    } else if (cleaned.startsWith('0') && cleaned.length >= 10) {
-                        prefix = cleaned.substring(1, 3);
-                    }
-
-                    if (prefix === '97' || prefix === '77') {
-                        airtelCount++;
-                        totalValid++;
-                    } else if (prefix === '96' || prefix === '76') {
-                        mtnCount++;
-                        totalValid++;
-                    } else if (prefix === '95' || prefix === '75') {
-                        zamtelCount++;
-                        totalValid++;
-                    } else if (cleaned.length >= 9) {
-                        airtelCount++;
-                        totalValid++;
-                    }
+        function setPaymentMethod(method) {
+            paymentMethod = method;
+            ['momo', 'card', 'paypal'].forEach(m => {
+                const btn = document.getElementById(`pm${m.charAt(0).toUpperCase() + m.slice(1)}`);
+                if(m === method) {
+                    btn.className = 'p-3 bg-indigo-600 border border-indigo-500 rounded-xl text-center transition font-semibold text-xs text-white';
+                } else {
+                    btn.className = 'p-3 bg-slate-950 border border-slate-800 rounded-xl text-center transition font-semibold text-xs text-slate-400 hover:text-white';
                 }
             });
-
-            document.getElementById('countAirtel').innerText = airtelCount;
-            document.getElementById('countMtn').innerText = mtnCount;
-            document.getElementById('countZamtel').innerText = zamtelCount;
-            document.getElementById('countTotal').innerText = totalValid;
-
-            updateCostEstimation(totalValid);
         }
 
-        function updateCharCount() {
-            const message = document.getElementById('messageInput').value;
-            const length = message.length;
-            const parts = length === 0 ? 0 : Math.ceil(length / 160);
-            
-            document.getElementById('charCounter').innerText = `${length} chars | ${parts} part${parts !== 1 ? 's' : ''}`;
-            
-            const totalValid = parseInt(document.getElementById('countTotal').innerText) || 0;
-            updateCostEstimation(totalValid, parts);
+        function processCheckout() {
+            cart.forEach(item => {
+                if(!purchases.some(p => p.id === item.id)) purchases.push(item);
+            });
+
+            showToast('Payment Successful!', 'Licenses generated and added to your Library.');
+            cart = [];
+            discountActive = false;
+            localStorage.setItem('airsound_cart', JSON.stringify(cart));
+            localStorage.setItem('airsound_purchases', JSON.stringify(purchases));
+
+            closeCheckoutModal();
+            updateCartUI();
+            updateDashboardStats();
+            renderDashboardLists();
+            renderTracks();
         }
 
-        function updateCostEstimation(totalRecipients, partsOverride) {
-            const message = document.getElementById('messageInput').value;
-            const parts = partsOverride !== undefined ? partsOverride : (message.length === 0 ? 0 : Math.ceil(message.length / 160));
-            const ratePerPart = 0.35;
-            const totalCost = totalRecipients * parts * ratePerPart;
-
-            document.getElementById('estimatedCostDisplay').innerText = `K ${totalCost.toFixed(2)}`;
+        function openUploadModal() {
+            document.getElementById('uploadModal').classList.remove('hidden');
         }
 
-        // Simulate Sending Campaign
-        function sendCampaign() {
-            const senderId = document.getElementById('senderIdSelect').value;
-            const totalValid = parseInt(document.getElementById('countTotal').innerText) || 0;
-            const message = document.getElementById('messageInput').value.trim();
+        function closeUploadModal() {
+            document.getElementById('uploadModal').classList.add('hidden');
+        }
 
-            if (!appState.currentUser) {
-                showToast("Authentication Required", "Please sign in to dispatch bulk SMS campaigns.", "error");
-                openModal('loginModal');
-                return;
-            }
-            if (totalValid === 0) {
-                showToast("Error", "Please enter at least one valid Zambian phone number.", "error");
-                return;
-            }
-            if (!message) {
-                showToast("Error", "Please enter message content.", "error");
-                return;
-            }
+        function handleUploadSubmit(e) {
+            e.preventDefault();
+            const title = document.getElementById('upTitle').value;
+            const artist = document.getElementById('upArtist').value;
+            const genre = document.getElementById('upGenre').value;
+            const priceZMW = parseFloat(document.getElementById('upPriceZMW').value);
+            const bpm = parseInt(document.getElementById('upBpm').value);
+            const cover = document.getElementById('upCover').value || 'https://placehold.co/400x400/1e1b4b/indigo?text=AirSound';
 
-            const parts = Math.ceil(message.length / 160);
-            const totalCreditsNeeded = totalValid * parts;
+            const newTrack = {
+                id: 'uploaded-' + Date.now(),
+                title, artist, genre, priceZMW, bpm, cover,
+                likes: 1,
+                plays: '12'
+            };
 
-            if (appState.currentUser.balance < totalCreditsNeeded) {
-                showToast("Insufficient Balance", `You need ${totalCreditsNeeded} credits, but have ${appState.currentUser.balance}. Please top up.`, "error");
-                return;
-            }
+            tracks.unshift(newTrack);
+            userUploads.unshift(newTrack);
 
-            const sendBtn = document.getElementById('sendBtn');
-            const statusBadge = document.getElementById('gatewayStatusBadge');
-            const outputBox = document.getElementById('simulationOutput');
+            localStorage.setItem('airsound_tracks', JSON.stringify(tracks));
+            localStorage.setItem('airsound_uploads', JSON.stringify(userUploads));
 
-            sendBtn.disabled = true;
-            sendBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Routing to Airtel, MTN & Zamtel...`;
-            statusBadge.className = "inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-500/20 text-amber-400 border border-amber-500/30";
-            statusBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-400 animate-ping mr-1.5"></span> Processing SMPP...`;
+            showToast('Success!', 'Your beat has been published to AirSound marketplace.');
+            closeUploadModal();
+            document.getElementById('uploadForm').reset();
 
-            outputBox.innerHTML = `
-                <div class="space-y-4 animate-pulse">
-                    <div class="h-4 bg-slate-800 rounded w-3/4"></div>
-                    <div class="h-20 bg-slate-800/80 rounded-xl p-4 space-y-2">
-                        <div class="h-3 bg-slate-700 rounded w-1/2"></div>
-                        <div class="h-3 bg-slate-700 rounded w-5/6"></div>
-                    </div>
-                    <p class="text-xs text-slate-400 text-center">Dispatching packets across Zambian carrier gateways...</p>
-                </div>
-            `;
+            renderTracks();
+            updateDashboardStats();
+            renderDashboardLists();
+        }
 
-            setTimeout(() => {
-                // Deduct balance
-                appState.currentUser.balance -= totalCreditsNeeded;
-                saveStateToStorage();
-                updateNavUI();
+        function updateDashboardStats() {
+            let totalEarnings = purchases.reduce((acc, p) => acc + (p.priceZMW * 0.85), 0);
+            document.getElementById('statEarnings').innerText = formatPrice(totalEarnings);
+            document.getElementById('statUploads').innerText = userUploads.length;
+            document.getElementById('statPurchases').innerText = purchases.length;
+        }
 
-                const cost = (totalCreditsNeeded * 0.35).toFixed(2);
-
-                sendBtn.disabled = false;
-                sendBtn.innerHTML = `<i class="fa-solid fa-paper-plane mr-2"></i> Send Bulk Campaign Now`;
-                
-                statusBadge.className = "inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30";
-                statusBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400 mr-1.5"></span> Campaign Completed`;
-
-                outputBox.innerHTML = `
-                    <div class="space-y-4 animate-in fade-in duration-300">
-                        <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-2xl p-4 text-emerald-300 flex items-center space-x-3">
-                            <i class="fa-solid fa-circle-check text-2xl text-emerald-400"></i>
+        function renderDashboardLists() {
+            const upList = document.getElementById('artistUploadsList');
+            if(userUploads.length === 0) {
+                upList.innerHTML = `<p class="text-xs text-slate-500 py-4 text-center">No uploaded tracks yet. Click Sell Music to publish!</p>`;
+            } else {
+                upList.innerHTML = userUploads.map(t => `
+                    <div class="flex items-center justify-between p-3 bg-slate-950 rounded-2xl border border-slate-800">
+                        <div class="flex items-center space-x-3">
+                            <img src="${t.cover}" class="w-10 h-10 rounded-xl object-cover">
                             <div>
-                                <p class="text-sm font-bold text-white">Campaign Dispatched Successfully!</p>
-                                <p class="text-xs text-slate-300">Sender ID: <strong>${senderId}</strong></p>
+                                <h4 class="text-xs font-bold text-white truncate">${t.title}</h4>
+                                <p class="text-[10px] text-slate-400">${t.genre} • ${formatPrice(t.priceZMW)}</p>
                             </div>
                         </div>
-
-                        <div class="grid grid-cols-2 gap-3 text-xs">
-                            <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700">
-                                <span class="text-slate-400 block">Total Recipients</span>
-                                <span class="text-lg font-bold text-white">${totalValid} Numbers</span>
-                            </div>
-                            <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700">
-                                <span class="text-slate-400 block">Total Deducted</span>
-                                <span class="text-lg font-bold text-emerald-400">${totalCreditsNeeded} Credits (K ${cost})</span>
-                            </div>
-                            <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700">
-                                <span class="text-slate-400 block">Delivered (DLR)</span>
-                                <span class="text-lg font-bold text-emerald-400">${totalValid} (100%)</span>
-                            </div>
-                            <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700">
-                                <span class="text-slate-400 block">Failed / Rejected</span>
-                                <span class="text-lg font-bold text-red-400">0 (0%)</span>
-                            </div>
-                        </div>
-
-                        <div class="text-xs text-slate-400 bg-slate-950 p-3 rounded-xl border border-slate-800 font-mono">
-                            [LOG] Airtel HLR: OK | MTN HLR: OK | Zamtel HLR: OK<br>
-                            [TIMESTAMP] ${new Date().toLocaleTimeString()} CAT
-                        </div>
+                        <span class="px-2.5 py-1 rounded-lg bg-indigo-500/20 text-indigo-400 text-[10px] font-semibold">Active</span>
                     </div>
-                `;
+                `).join('');
+            }
 
-                showToast("Campaign Sent", `Successfully routed ${totalValid} messages across Zambian networks.`, "success");
-            }, 1500);
-        }
-
-        // Copy Code Snippet
-        function copyCodeSnippet() {
-            const codeText = document.getElementById('apiCodeBlock').innerText;
-            const textarea = document.createElement('textarea');
-            textarea.value = codeText;
-            document.body.appendChild(textarea);
-            textarea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textarea);
-            showToast("Copied to Clipboard", "PHP cURL snippet copied successfully.", "success");
-        }
-
-        // Modal Handlers & Auth Forms
-        function openModal(type) {
-            const modal = document.getElementById('authModal');
-            const body = document.getElementById('modalContentBody');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-
-            if (type === 'loginModal') {
-                body.innerHTML = `
-                    <h3 class="text-2xl font-extrabold text-slate-900 mb-2">Welcome Back</h3>
-                    <p class="text-sm text-slate-500 mb-6">Sign in to your ZambiaBulkSMS dashboard.</p>
-                    <form onsubmit="handleLoginSubmit(event)" class="space-y-4">
-                        <div>
-                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Email Address</label>
-                            <input type="email" id="loginEmail" required placeholder="admin@company.zm" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Password</label>
-                            <input type="password" id="loginPassword" required placeholder="••••••••" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
-                        </div>
-                        <button type="submit" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-md transition-all">Sign In</button>
-                    </form>
-                    <div class="mt-4 text-center text-xs text-slate-500">
-                        Don't have an account? <button onclick="openModal('registerModal')" class="text-emerald-600 font-bold underline">Create Account</button>
-                    </div>
-                `;
+            const purList = document.getElementById('purchasedTracksList');
+            document.getElementById('purchasesCount').innerText = `${purchases.length} items`;
+            if(purchases.length === 0) {
+                purList.innerHTML = `<p class="text-xs text-slate-500 py-4 text-center">No purchased tracks in your library yet.</p>`;
             } else {
-                body.innerHTML = `
-                    <h3 class="text-2xl font-extrabold text-slate-900 mb-2">Create Free Account</h3>
-                    <p class="text-sm text-slate-500 mb-6">Get 50 free trial SMS credits instantly.</p>
-                    <form onsubmit="handleRegisterSubmit(event)" class="space-y-4">
-                        <div>
-                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Company / Organization Name</label>
-                            <input type="text" id="regCompany" required placeholder="Lusaka Logistics Ltd" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+                purList.innerHTML = purchases.map(p => `
+                    <div class="flex items-center justify-between p-3 bg-slate-950 rounded-2xl border border-slate-800">
+                        <div class="flex items-center space-x-3">
+                            <img src="${p.cover}" class="w-10 h-10 rounded-xl object-cover">
+                            <div>
+                                <h4 class="text-xs font-bold text-white truncate">${p.title}</h4>
+                                <p class="text-[10px] text-slate-400">${p.artist}</p>
+                            </div>
                         </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Zambian Mobile Number</label>
-                            <input type="tel" id="regPhone" required placeholder="0977123456" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Email Address</label>
-                            <input type="email" id="regEmail" required placeholder="info@company.zm" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Password</label>
-                            <input type="password" id="regPassword" required placeholder="••••••••" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
-                        </div>
-                        <button type="submit" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-md transition-all">Create Account & Claim Credits</button>
-                    </form>
-                    <div class="mt-4 text-center text-xs text-slate-500">
-                        Already have an account? <button onclick="openModal('loginModal')" class="text-emerald-600 font-bold underline">Sign In</button>
+                        <button onclick="showToast('Downloading', 'Downloading high-quality WAV & Stems package...')" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-xl transition flex items-center space-x-1">
+                            <i class="fa-solid fa-download"></i><span>WAV</span>
+                        </button>
                     </div>
-                `;
+                `).join('');
             }
         }
 
-        function closeModal() {
-            const modal = document.getElementById('authModal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        }
+        function showToast(title, message, type='success') {
+            const toast = document.getElementById('toast');
+            const icon = document.getElementById('toastIcon');
+            document.getElementById('toastTitle').innerText = title;
+            document.getElementById('toastMessage').innerText = message;
 
-        function handleRegisterSubmit(e) {
-            e.preventDefault();
-            const company = document.getElementById('regCompany').value.trim();
-            const phone = document.getElementById('regPhone').value.trim();
-            const email = document.getElementById('regEmail').value.trim();
-
-            appState.currentUser = {
-                company: company,
-                phone: phone,
-                email: email,
-                balance: 50 // 50 free credits
-            };
-
-            saveStateToStorage();
-            updateNavUI();
-            closeModal();
-            showToast("Account Created", `Welcome ${company}! 50 free trial credits added to your wallet.`, "success");
-        }
-
-        function handleLoginSubmit(e) {
-            e.preventDefault();
-            const email = document.getElementById('loginEmail').value.trim();
-
-            appState.currentUser = {
-                company: email.split('@')[0].toUpperCase() + " CORP",
-                phone: "0977000000",
-                email: email,
-                balance: appState.currentUser ? appState.currentUser.balance : 120
-            };
-
-            saveStateToStorage();
-            updateNavUI();
-            closeModal();
-            showToast("Welcome Back", `Successfully signed in as ${email}.`, "success");
-        }
-
-        function handleLogout() {
-            appState.currentUser = null;
-            saveStateToStorage();
-            updateNavUI();
-            showToast("Signed Out", "You have successfully signed out of your account.", "success");
-        }
-
-        // Toast notification helper
-        function showToast(title, message, type) {
-            const toast = document.getElementById('toastNotification');
-            const toastTitle = document.getElementById('toastTitle');
-            const toastMessage = document.getElementById('toastMessage');
-            const toastIcon = document.getElementById('toastIcon');
-
-            toastTitle.innerText = title;
-            toastMessage.innerText = message;
-
-            if (type === 'success') {
-                toastIcon.className = "fa-solid fa-circle-check text-emerald-400 text-lg";
+            if(type === 'error') {
+                icon.className = 'w-10 h-10 rounded-full flex items-center justify-center bg-rose-500/20 text-rose-400';
+                icon.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i>';
             } else {
-                toastIcon.className = "fa-solid fa-circle-exclamation text-red-400 text-lg";
+                icon.className = 'w-10 h-10 rounded-full flex items-center justify-center bg-emerald-500/20 text-emerald-400';
+                icon.innerHTML = '<i class="fa-solid fa-check"></i>';
             }
 
-            toast.classList.remove('translate-y-24', 'opacity-0');
-            toast.classList.add('translate-y-0', 'opacity-100');
-
+            toast.classList.remove('translate-x-full');
             setTimeout(() => {
-                toast.classList.remove('translate-y-0', 'opacity-100');
-                toast.classList.add('translate-y-24', 'opacity-0');
-            }, 4000);
+                toast.classList.add('translate-x-full');
+            }, 3500);
         }
     </script>
 </body>
